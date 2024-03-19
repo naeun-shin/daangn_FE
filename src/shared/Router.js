@@ -7,16 +7,16 @@ import Footer from '../components/commons/Footer';
 
 
 const Router = () => {
-    return (
-        <BrowserRouter>
-            {/* <Header /> */}
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/auth" element={<AuthForm />} />
-            </Routes>
-            {/* <Footer /> */}
-        </BrowserRouter >
-    );
+  return (
+    <BrowserRouter>
+      {/* <Header /> */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<AuthForm />} />
+      </Routes>
+      {/* <Footer /> */}
+    </BrowserRouter >
+  );
 };
 
 export default Router;

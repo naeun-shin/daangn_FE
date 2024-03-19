@@ -3,36 +3,36 @@ import logoImage from '../../images/logoImage.png'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
 
-const home = () => {
-    const nav = useNavigate();
+const Home = () => {
+  const nav = useNavigate();
 
 
-    const handleStartClick = () => {
-        nav("/auth", { state: { isLogin: false } });
-    };
-    const handleLoginClick = () => {
-        nav("/auth", { state: { isLogin: true } });
-    };
+  const handleStartClick = () => {
+    nav("/auth", { state: { isLogin: false } });
+  };
+  const handleLoginClick = () => {
+    nav("/auth", { state: { isLogin: true } });
+  };
 
 
-    return (
-        <StyledDiv>
-            <img style={{ height: '150px' }} src={logoImage} alt="당근마켓 logo" />
-            <div>
-                <h2>당신 근처의 당근</h2>
-                <span>동네라서 가능한 모든 것<br />
-                    지금 내 동네를 선택하고 시작해보세요!</span>
-            </div>
-            <StartBtn onClick={handleStartClick}>시작하기</StartBtn>
-            <StartDiv>
-                <span>이미 계정이 있나요?</span>
-                <span onClick={handleLoginClick}>로그인</span>
-            </StartDiv>
-        </StyledDiv>
-    )
+  return (
+    <StyledDiv>
+      <img style={{ height: '150px' }} src={logoImage} alt="당근마켓 logo" />
+      <div>
+        <h2>당신 근처의 당근</h2>
+        <span>동네라서 가능한 모든 것<br />
+          지금 내 동네를 선택하고 시작해보세요!</span>
+      </div>
+      <StartBtn onClick={handleStartClick}>시작하기</StartBtn>
+      <StartDiv>
+        <span>이미 계정이 있나요?</span>
+        <span onClick={handleLoginClick}>로그인</span>
+      </StartDiv>
+    </StyledDiv>
+  )
 }
 
-export default home;
+export default Home;
 
 const StyledDiv = styled.div`
     display: flex;
