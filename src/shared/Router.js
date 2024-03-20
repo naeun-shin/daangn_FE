@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from '../pages/home/Home';
-import AuthForm from '../pages/home/AuthForm'
+import UserMain from '../pages/user/UserMain'
 import Header from '../components/commons/Header';
 import Footer from '../components/commons/Footer';
 
@@ -12,7 +12,7 @@ const Router = () => {
       {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<AuthForm />} />
+        <Route path="/auth" element={<UserMain />} />
       </Routes>
       {/* <Footer /> */}
     </BrowserRouter >
