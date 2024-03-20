@@ -6,4 +6,10 @@ const Break = styled.div`
   height: 5px;
 `;
 
-export { Break };
+const LightBreak = styled.div`
+  background-color: lightGray;
+  width: 410;
+  height: 2px;
+`;
+
+export { Break, LightBreak };

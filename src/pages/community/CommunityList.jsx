@@ -10,6 +10,8 @@ import {
   Header,
 } from "../CommunityStyles";
 import { useNavigate } from "react-router-dom";
+import { GoThumbsup } from "react-icons/go";
+import { IoChatbubbleOutline } from "react-icons/io5";
 
 const CommunityList = () => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const CommunityList = () => {
                 나랑 같이 개발하면 좋을텐데~~언제 모여서 하나~
               </CommunityContent>
             </div>
-            <CommunityImage>image</CommunityImage>
+            <CommunityImage />
           </CommunityBox>
           <CommunitySubBox>
             <CommunitySubBox>
@@ -37,8 +39,8 @@ const CommunityList = () => {
               <div>조회 count</div>
             </CommunitySubBox>
             <CommunitySubBox>
-              <div>좋아요 count</div>
-              <div>댓글 count</div>
+              <GoThumbsup /> count &nbsp;
+              <IoChatbubbleOutline /> count
             </CommunitySubBox>
           </CommunitySubBox>
         </CommunityContainer>

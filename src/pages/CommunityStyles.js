@@ -1,15 +1,29 @@
 import styled from "styled-components";
+import bear from "../images/bear.png";
+import TEST1 from "../images/TEST1.jpg";
+
 const Header = styled.div`
   height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  /* border: 1px solid black; */
+  /* padding-bottom: 5px; */
+  font-weight: bold;
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+  }
+`;
+const CommunityWrapper = styled.div`
+  overflow: auto;
 `;
 
-const GoBack = styled.div`
-  height: 100px;
-`;
 const Container = styled.div`
   padding: 10px;
-  width: 410 px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 
 const CommunityContainer = styled.div`
@@ -28,9 +42,11 @@ const CommunityContent = styled.div`
 `;
 
 const CommunityImage = styled.div`
+  background-image: url(${TEST1});
+  background-size: cover;
   width: 60px;
   height: 60px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 5px;
   float: right;
 `;
@@ -48,6 +64,7 @@ const CommunitySubBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  justify-items: center;
 `;
 
 const CommunitySubBoxLeft = styled.div`
@@ -70,9 +87,11 @@ const CommumnityDetailHeaderSub = styled.div`
 const CommunityDetailCnt = styled.div``;
 
 const UserImage = styled.div`
+  background-image: url(${bear});
+  background-size: cover;
   width: 30px;
   height: 30px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 50px;
   margin-right: 5px;
 `;
@@ -90,8 +109,34 @@ const CommunityDetailTitle = styled.div`
 const CommunityDetailContent = styled.div`
   width: auto;
   height: auto;
-  border: 1px solid black;
-  padding: 5px 0px;
+  /* border: 1px solid black; */
+  padding: 5px;
+`;
+
+const CommunityCountBox = styled.div`
+  display: flex;
+  align-items: center;
+  color: gray;
+  font-size: 14px;
+`;
+
+const CommunityDetailLikeBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 5px;
+`;
+
+const CommunityDetailLikeAndSave = styled.div`
+  display: flex;
+  align-items: center;
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  /* width: 65px; */
+  height: 30px;
+  font-size: 12px;
+  padding: 0px 20px;
+  justify-content: center;
 `;
 
 const CommunityDetailCommentHeader = styled.div`
@@ -102,7 +147,7 @@ const CommunityDetailCommentHeader = styled.div`
 `;
 const CommunityDetailFirstCommentBox = styled.div`
   padding: 10px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 
 const CommunityLike = styled.div`
@@ -111,38 +156,117 @@ const CommunityLike = styled.div`
   display: flex;
   align-items: center;
   padding: 5px;
+  margin-top: 10px;
 `;
 
 const CommunityDetailFirstComment = styled.div`
   margin: 5px 0px 0px 35px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 const CommunityDetailSecondCommentBox = styled.div`
   padding: 10px;
   margin-left: 35px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+`;
+
+const CommunityWriteBox = styled.div`
+  /* padding: 10px; */
+`;
+
+const CommunityWriteTitle = styled.input`
+  width: 97%;
+  height: 5vh;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px 3px;
+  border: none;
+  :focus {
+    outline-color: #ff6f0f;
+  }
+`;
+
+const CommunityWriteContent = styled.textarea`
+  display: flex;
+  align-items: center;
+  width: 97%;
+  height: 70vh;
+  font-size: 16px;
+  color: #d3d3d359;
+  padding: 5px 3px;
+  resize: none;
+  line-height: 1.5;
+  border: none;
+`;
+
+const CommunityWriteFooter = styled.div`
+  display: flex;
+  align-items: center;
+  height: 2vh;
+  padding: 5px 0px;
+  p {
+    font-size: 14px;
+  }
+`;
+
+const Footer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+
+  input {
+    border-radius: 15px;
+    border-style: none;
+    background-color: #d3d3d359;
+    padding: 10px 7px;
+    width: 70%;
+  }
+`;
+
+const FooterLeft = styled.div`
+  margin-left: 5px;
+  /* padding: 2px; */
+`;
+
+const CommunityDetailImage = styled.img.attrs((props) => ({
+  src: props.src,
+}))`
+  border-radius: 10px;
+  /* border: 1px solid black; */
+  width: 100%;
+  margin: 5px 0px;
 `;
 export {
   Header,
-  GoBack,
   Container,
+  CommunityWrapper,
+  CommunityContainer,
   CommunityTitle,
   CommunityContent,
   CommunityImage,
   CommunityBox,
   CommunitySubBox,
   CommunitySubBoxLeft,
-  CommunityContainer,
   CommunityDetailBox,
   CommumnityDetailHeaderSub,
   CommunityDetailCnt,
   CommunityDetailTitle,
   CommunityDetailContent,
   CommunityDetailCommentHeader,
+  CommunityCountBox,
+  CommunityDetailLikeAndSave,
   CommunityDetailFirstCommentBox,
   CommunityDetailFirstComment,
   CommunityDetailSecondCommentBox,
+  CommunityDetailImage,
   CommunityLike,
   UserImage,
+  CommunityDetailLikeBox,
+  CommunityWriteTitle,
+  CommunityWriteContent,
+  CommunityWriteFooter,
+  CommunityWriteBox,
   UserName,
+  Footer,
+  FooterLeft,
 };
