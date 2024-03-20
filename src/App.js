@@ -1,21 +1,22 @@
 import React from 'react';
-// import { Router } from 'react-router-dom';
-import Header from './components/layout/Header';
-import Maincategory from './components/layout/Maincategory';
-import MainItem from './components/layout/MainItem';
-import WritingButton from './components/commons/Button';
+import Noti from './pages/Noti';
+// import Header from './components/layout/Header';
+// import Maincategory from './components/layout/Maincategory';
+// import MainItem from './components/layout/MainItem';
+// import WritingButton from './components/commons/Button';
+// 여기까지는 메인 홈
 
 const App = () => {
   return (
     <div>
-      <Header />
+      {/* <Header />
       <Maincategory />
       <MainItem />
       <MainItem />
       <MainItem />
       <MainItem />
-      <MainItem />
-      <WritingButton />
+      <WritingButton /> */}
+      <Noti />
     </div>
   );
 };
