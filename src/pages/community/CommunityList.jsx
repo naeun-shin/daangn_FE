@@ -21,54 +21,55 @@ const CommunityList = () => {
   const [page, setPage] = useState(1);
   const [contentArray, setContentArray] = useState([]);
 
-  const handleGoToDetailClick = () => {
-    navigate("/CommunityDetail");
-  };
-
   const { data } = useQuery({
     queryKey: ["community", isAsc, page],
     queryFn: () => getCommunityList(isAsc, page),
   });
-
+  console.log(data);
   useEffect(() => {
-    if (data && data.data) {
+    if (data) {
       const pageNation = data.data.pageable;
       const contentArray = data.data.content;
-      // console.log(pageNation);
-      // console.log(contentArray);
+
       setContentArray(contentArray);
     }
-  }, [data]); // data가 변경될 때마다 useEffect가 호출되어 업데이트됩니다.
-
+  }, [data]);
+  console.log(contentArray);
+  // data가 변경될 때마다 useEffect가 호출되어 업데이트됩니다.
+  const handleGoToDetailClick = (id) => {
+    console.log(id);
+    navigate(`/CommunityDetail/${id}`);
+  };
   return (
     <>
       <Header />
       <Container>
         {contentArray.map((item) => (
-          <>
-            <CommunityContainer key={item.id} onClick={handleGoToDetailClick}>
-              <CommunityBox>
-                <div>
-                  <CommunityTitle>{item.title}</CommunityTitle>
-                  <CommunityContent>{item.content}</CommunityContent>
-                </div>
-                {!item.communityImage ? null : (
-                  <CommunityImage src={item.communityImage.url} />
-                )}
-              </CommunityBox>
+          <CommunityContainer
+            key={item.communityId}
+            onClick={() => handleGoToDetailClick(item.communityId)}
+          >
+            <CommunityBox>
+              <div>
+                <CommunityTitle>{item.title}</CommunityTitle>
+                <CommunityContent>{item.content}</CommunityContent>
+              </div>
+              {!item.communityImage ? null : (
+                <CommunityImage src={item.communityImage.url} />
+              )}
+            </CommunityBox>
+            <CommunitySubBox>
               <CommunitySubBox>
-                <CommunitySubBox>
-                  <div>{item.address}</div> &nbsp;
-                  <div>{item.createdAt}</div> &nbsp;
-                  <div>조회 </div>
-                </CommunitySubBox>
-                <CommunitySubBox>
-                  <GoThumbsup /> &nbsp;
-                  <IoChatbubbleOutline />
-                </CommunitySubBox>
+                <div>{item.address}</div> &nbsp;
+                <div>{item.createdAt}</div> &nbsp;
+                <div>조회 </div>
               </CommunitySubBox>
-            </CommunityContainer>
-          </>
+              <CommunitySubBox>
+                <GoThumbsup /> &nbsp;
+                <IoChatbubbleOutline />
+              </CommunitySubBox>
+            </CommunitySubBox>
+          </CommunityContainer>
         ))}
       </Container>
     </>

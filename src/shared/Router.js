@@ -14,7 +14,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<Community />} />
           <Route path="/communityCreate" element={<CommunityCreate />} />
-          <Route path="/CommunityDetail" element={<CommunityDetail />} />
+          <Route path="/CommunityDetail/:id" element={<CommunityDetail />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

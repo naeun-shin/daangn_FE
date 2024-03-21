@@ -16,11 +16,9 @@ export const createCommunity = async (communityValue) => {
   console.log(communityValue);
   try {
     const { category, title, content, selectedImage, address } = communityValue;
-
     const formData = new FormData();
     formData.append("files", selectedImage); // 이미지를 FormData에 추가
-    console.log(formData.get("files"));
-    // JSON 데이터를 FormData에 추가
+
     formData.append(
       "CommunityRequestDto",
       JSON.stringify({
@@ -30,16 +28,23 @@ export const createCommunity = async (communityValue) => {
         address,
       }),
     );
-    console.log(formData.get("CommunityRequestDto"));
     // FormData에는 이미지와 JSON 데이터가 함께 포함되어 있음
 
-    const response = await instance.post("/community", formData, {
+    await instance.post("/community", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+export const getCommunityDetail = async (id) => {
+  try {
+    const response = await instance.get(`/community/${id}`);
     console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
   }
