@@ -9,4 +9,6 @@ const Notipage = () => {
   );
 };
 
+
 export default Notipage;
+
