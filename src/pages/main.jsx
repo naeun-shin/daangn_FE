@@ -72,3 +72,4 @@ const StartDiv = styled.div`
         color: #FF6F0F;
     }
 `
+

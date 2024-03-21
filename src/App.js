@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 import Router from "./routes/Router";
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -12,5 +11,6 @@ function App() {
     </QueryClientProvider>
   );
 }
+
 
 export default App;
