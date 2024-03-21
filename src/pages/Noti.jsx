@@ -4,16 +4,18 @@ import styled from 'styled-components';
 
 // 알림 아이템
 const NotiItem = ({ title, timeAgo, contents, logo }) => (
-  <Noti>
-    <Logo />
-    <NotiContent>
-      <TextContainer>
+  <NotiContainer>
+    <NotiBox>
+      <LogoBox>
+        {logo ? <img src={logo} alt='logo' /> : <div>logo</div>}
+      </LogoBox>
+      <NotiContentBox>
         <Title>{title}</Title>
         <Contents>{contents}</Contents>
-      </TextContainer>
-      <TimeAgo>{timeAgo}</TimeAgo>
-    </NotiContent>
-  </Noti>
+        <TimeAgo>{timeAgo}</TimeAgo>
+      </NotiContentBox>
+    </NotiBox>
+  </NotiContainer>
 );
 
 const TabList = () => {
@@ -30,8 +32,8 @@ const TabList = () => {
     },
     {
       id: 2,
-      title: '나눔의 날 3월 소식! 농부들의 나눔',
-      contents: '삐삥님께 따뜻한 봄날이 느껴지는 나눔 사연을 전해요.',
+      title: '나눔의 날 3월 소식!',
+      contents: '봄날이 느껴지는 나눔 사연을 전해요.',
       timeAgo: '5일 전',
       logo: '당근',
     },
@@ -53,17 +55,17 @@ const TabList = () => {
         <NotiTab active={true}>활동 알림</NotiTab>
         <NotiTab active={false}>키워드 알림</NotiTab>
       </NotiTabMenu>
-      <NotisContainer>
+      <NotiContainer>
         {notis.map((noti) => (
           <NotiItem
             key={noti.id}
             title={noti.title}
             contents={noti.contents}
             timeAgo={noti.timeAgo}
-            logoUrl={noti.logoUrl} // 로고 URL을 NotiItem에 전달
+            logo={noti.logo}
           />
         ))}
-      </NotisContainer>
+      </NotiContainer>
     </>
   );
 };
@@ -89,8 +91,6 @@ const NotiHeader = styled.div`
 
 const NotiTabMenu = styled.div`
   display: flex;
-  /* justify-content: space-between;
-  background-color: #f8f8f8; */
   border-bottom: 2px solid #eee;
 `;
 
@@ -109,50 +109,45 @@ const NotiTab = styled.div`
   }
 `;
 
-const NotisContainer = styled.div`
-  width: 430px;
-  height: 200px;
-  background-color: #fff;
+const NotiContainer = styled.div`
+  width: 390px;
+  border-bottom: 1px solid #eee;
+  margin: 0 auto;
 `;
 
-// Noti 컴포넌트의 스타일 업데이트 (가로 정렬을 위해)
-const Noti = styled.div`
+const NotiBox = styled.div`
   display: flex;
-  align-items: center;
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #f0f0f0;
-  border-radius: 8px;
+  margin: 20px auto;
 `;
 
-const Logo = styled.img`
+const LogoBox = styled.div`
+  border: 1px solid #000;
+  border-radius: 50%;
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   margin-right: 10px;
   background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const TextContainer = styled.div`
+const NotiContentBox = styled.div`
   flex-grow: 1;
-`;
-
-const Title = styled.span`
-  font-weight: bold;
-  color: #333;
-`;
-const Contents = styled.span`
-  font-weight: 500;
-  color: #333;
-`;
-const TimeAgo = styled.span`
-  margin-left: auto;
-  color: #666;
-`;
-const NotiContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  margin-left: 10px;
+`;
+const Title = styled.span`
+  font-size: 19px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+`;
+const Contents = styled.span`
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 5px;
+`;
+const TimeAgo = styled.span`
+  color: #666;
 `;
