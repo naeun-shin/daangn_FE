@@ -1,14 +1,25 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Intro from '../pages/Intro';
+import UserMain from '../pages/user/UserMain';
+import Footer from '../components/layout/Footer';
+import MypageMain from '../pages/mypage/MypageMain';
 import Notipage from '../pages/Notipage';
+import Home from '../pages/Home'
+
 
 const Router = () => {
   return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/noti' element={<Notipage />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Intro />} />
+        <Route path="/home" element={<Home />} />
+        <Route path='/noti' element={<Notipage />} />
+        <Route path="/auth" element={<UserMain />} />
+        <Route path="/mypage" element={<MypageMain />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter >
   );
 };
 
