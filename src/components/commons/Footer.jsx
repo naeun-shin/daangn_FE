@@ -22,7 +22,7 @@ const Footer = () => {
     mypage: false,
   });
 
-  if (location.pathname === "/") {
+  if (location.pathname === "/" || location.pathname === "/auth") {
     return null;
   }
 

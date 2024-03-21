@@ -4,7 +4,7 @@ import Home from '../pages/home/Home';
 import UserMain from '../pages/user/UserMain';
 import Header from '../components/commons/Header';
 import Footer from '../components/commons/Footer';
-import Mypage from '../pages/mypage/MypageMain';
+import MypageMain from '../pages/mypage/MypageMain';
 
 
 const Router = () => {
@@ -14,7 +14,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<UserMain />} />
-        <Route paht="/mypage" element={<Mypage />} />
+        <Route path="/mypage" element={<MypageMain />} />
       </Routes>
       <Footer />
     </BrowserRouter >
