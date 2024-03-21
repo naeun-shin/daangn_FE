@@ -6,6 +6,8 @@ import basicImg from '../../images/basicImg.png';
 const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [profileImage, setProfileImage] = useState(null);
 
   const handleFileChange = (e) => {
@@ -17,8 +19,26 @@ const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = () => {
     console.log('Nickname:', nickname);
     console.log('Profile image:', profileImage);
-    onSubmit({ nickname, profileImage });
+    onSubmit({ nickname, password, email, profileImage });
   };
+
+  const validatePassword = () => {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()]).{8,15}$/;
+    if (!passwordPattern.test(password)) {
+      setPasswordError(`비밀번호는 8~15자리의 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.
+      사용가능 특수문자: ~ ! @ # $ % ^ & * ( )`);
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    validatePassword();
+  };
+
 
   return (
     <Modal
@@ -66,10 +86,19 @@ const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
           onChange={(e) => setNickname(e.target.value)}
         />
         <StyledInput
+          type="password"
+          placeholder="비밀번호를 입력해주세요."
+          value={password}
+          onChange={handlePasswordChange}
+          style={{ marginBottom: 0 }}
+        />
+        {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+        <StyledInput
           type="email"
           placeholder="이메일을 입력해주세요."
           value={email}
-          onChange={(e) => setEmail(e.target.value)} />
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ marginTop: '20px' }} />
         <p>프로필 사진과 닉네임, 이메일을 입력해주세요.</p>
         <SubmitButton onClick={handleSubmit}>다음</SubmitButton>
       </ModalContent>
@@ -131,4 +160,12 @@ const SubmitButton = styled.button`
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: left;
+  margin: 0 18px;
 `;

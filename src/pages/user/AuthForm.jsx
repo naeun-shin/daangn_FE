@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ProfileModal from './ProfileModal';
 import { useMutation } from 'react-query';
+import axios from 'axios';
+import AddressModal from './AddressModal';
 
 const AuthForm = () => {
   const nav = useNavigate();
@@ -13,6 +15,7 @@ const AuthForm = () => {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [inputVerificationCode, setInputVerificationCode] = useState('');
+  const [showAddressModal, setShowAddressModal] = useState(true);
 
   const [user, setUser] = useState({
     phoneNumber: '',
@@ -21,6 +24,16 @@ const AuthForm = () => {
     email: '111@111.com',
     password: 'Abc1234!!!',
   })
+
+  //주소 받기
+  const handleSubmitAddressModal = ({ address }) => {
+    console.log('address: ', address);
+    setUser({
+      ...user,
+      address,
+    })
+    setShowAddressModal(false);
+  }
 
   const handlePhoneNumberChange = (e) => {
     const input = e.target.value;
@@ -56,45 +69,98 @@ const AuthForm = () => {
     })
   };
 
-  const handleVerificationButtonClick = () => {
-    // 인증번호 발송 로직 추가
-    const code = Math.floor(100000 + Math.random() * 900000);
-    console.log('인증번호:', code);
 
-    setVerificationCode(code);
-    setShowVerificationButton(true);
-    setShowVerificationModal(false);
-    setIsButtonActive(false);
-  };
-
-  const handleVerificationConfirm = () => {
-    if (parseInt(inputVerificationCode) === verificationCode) {
-      if (!isLogin) {
-        setShowVerificationModal(true);
-      } else {
-        nav('/');
-      }
-    } else {
-      setErrorMessage('인증번호가 올바르지 않습니다.');
+  //인증번호 발송
+  const sendPhoneNumber = async (phoneNumber) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/send-code-phone`, {
+        phoneNumber: phoneNumber
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('API 호출이 실패했습니다.');
     }
   };
 
+  const sendPhoneNumberMutation = useMutation(sendPhoneNumber, {
+    onSuccess: (data) => {
+      const match = data.data.match(/\((\d+)\)/);
+      if (match) {
+        const code = match[1];
+        console.log('인증번호:', code);
+
+        setVerificationCode(code);
+        setShowVerificationButton(true);
+        setShowVerificationModal(false);
+        setIsButtonActive(false);
+      } else {
+        console.error('인증번호를 찾을 수 없습니다.');
+      }
+    },
+    onError: () => {
+      console.error('API 호출 중 오류 발생');
+    }
+  });
+
+  const handleVerificationButtonClick = async () => {
+    sendPhoneNumberMutation.mutate(user.phoneNumber);
+  };
+
+
+
+  //인증번호 일치여부 확인
+  const checkPhoneNumber = async (phoneNumber, verificationCode) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/check-code-phone`, {
+        phoneNumber,
+        checkNumber: verificationCode,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('API 호출이 실패했습니다.');
+    }
+  };
+
+  const checkPhoneNumberMutation = useMutation(sendPhoneNumber, {
+    onSuccess: (data) => {
+      if (data.data) {
+        if (!isLogin) {
+          setShowVerificationModal(true);
+        } else {
+          nav('/');
+        }
+      } else {
+        console.error('인증번호가 일치하지 않습니다.');
+      }
+    },
+    onError: () => {
+      console.error('API 호출 중 오류 발생');
+    }
+  });
+
+  const handleVerificationConfirm = async () => {
+    checkPhoneNumberMutation.mutate(user.phoneNumber, verificationCode);
+  };
+
+
+
+
   const mutation = useMutation((formData) => {
-    return fetch('http://3.38.152.248/user/signup', {
-      method: 'POST',
-      body: formData,
+    return axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
       headers: {
         'accept': '*/*',
         // 'Content-Type': 'multipart/form-data',
       },
-    }).then(response => response.json());
+    })
+      .then(response => response.data);
   });
 
-  const handleSubmitProfileModal = ({ nickname, email, profileImage }) => {
+  const handleSubmitProfileModal = ({ nickname, password, email, profileImage }) => {
     console.log('nick: ', nickname);
     setUser({
       ...user,
       nickname,
+      password,
       email,
     });
     setShowVerificationModal(false);
@@ -102,9 +168,9 @@ const AuthForm = () => {
     const formData = new FormData();
     formData.append('signupRequestDto', JSON.stringify({
       email,
-      password: user.password,
+      password,
       nickname,
-      phoneNumber: user.phoneNumber.replace(' ', '-'),
+      phoneNumber: user.phoneNumber,
       address: user.address,
     }));
     formData.append('files', profileImage)
@@ -126,8 +192,10 @@ const AuthForm = () => {
   };
 
 
+
   return (
     <div>
+      {showAddressModal && <AddressModal isOpen={true} onClose={() => setShowAddressModal(false)} onSubmit={handleSubmitAddressModal} />}
       <div style={{ fontSize: '30px', marginBottom: '50px', cursor: 'pointer' }} onClick={() => { nav(-1) }}>&lt;</div>
       <div style={{ marginLeft: '15px' }}>
         <HelloSpan>안녕하세요!</HelloSpan><br />
@@ -226,3 +294,7 @@ const ErrorMessage = styled.div`
   font-size: 14px;
   margin-top: 5px;
 `;
+
+
+
+
