@@ -23,7 +23,7 @@ import {
   FooterLeft,
 } from "../CommunityStyles";
 import { useNavigate, useParams } from "react-router-dom";
-import { Break } from "../../styles/commonStyles";
+import { Break } from "../styles/commonStyles";
 import { FaRegEye } from "react-icons/fa";
 import { GoThumbsup } from "react-icons/go";
 import { AiOutlinePicture } from "react-icons/ai";
@@ -77,7 +77,7 @@ const CommunityDetail = () => {
           <CommunityDetailTitle>{detailList.title}</CommunityDetailTitle>
           <CommunityDetailContent>
             <div>{detailList.contents}</div>
-            {}
+            { }
 
             {detailImage.map((image, index) => (
               <div key={index}>

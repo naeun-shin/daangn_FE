@@ -11,7 +11,7 @@ import {
 } from "../CommunityStyles";
 import { AiOutlinePicture } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
-import { LightBreak } from "../../styles/commonStyles";
+import { LightBreak } from "../styles/commonStyles.js";
 import { VscClose } from "react-icons/vsc";
 import { useMutation } from "@tanstack/react-query";
 import { createCommunity } from "../../apis/communityAxios.js";
@@ -133,7 +133,7 @@ const CommunityCreate = () => {
             type="file"
             // style={{ display: "none" }}
             onChange={handleImageChange}
-            // value={selectedImage}
+          // value={selectedImage}
           />
           <AiOutlinePicture /> &nbsp;
           <p>사진</p>
