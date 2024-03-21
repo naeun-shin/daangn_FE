@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ProfileModal from './ProfileModal';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import AddressModal from './AddressModal';
+import { Cookies } from 'react-cookie';
 
 const AuthForm = () => {
   const nav = useNavigate();
@@ -16,6 +17,8 @@ const AuthForm = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [showAddressModal, setShowAddressModal] = useState(true);
+
+  const cookie = new Cookies();
 
   const [user, setUser] = useState({
     phoneNumber: '',
@@ -73,7 +76,7 @@ const AuthForm = () => {
   };
 
 
-  //인증번호 발송
+  //가입 인증번호 발송
   const sendPhoneNumber = async (phoneNumber) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/send-code-phone`, {
@@ -85,7 +88,21 @@ const AuthForm = () => {
     }
   };
 
-  const sendPhoneNumberMutation = useMutation(sendPhoneNumber, {
+  //로그인 인증번호 발송
+  const sendPhoneNumber2 = async (phoneNumber) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login/send-code-phone`, {
+        phoneNumber: phoneNumber,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('API 호출이 실패했습니다.');
+    }
+  };
+
+
+  const sendPhoneNumberMutation = useMutation({
+    mutationFn: sendPhoneNumber,
     onSuccess: (data) => {
       const match = data.data.match(/\((\d+)\)/);
       if (match) {
@@ -105,18 +122,40 @@ const AuthForm = () => {
     }
   });
 
+  const sendPhoneNumberMutation2 = useMutation({
+    mutationFn: sendPhoneNumber2,
+    onSuccess: (data) => {
+      const match = data.data.match(/\((\d+)\)/);
+      if (match) {
+        const code = match[1];
+        console.log('인증번호:', code);
+
+        setVerificationCode(code);
+        setShowVerificationButton(true);
+        setShowVerificationModal(false);
+        setIsButtonActive(false);
+      } else {
+        console.error('인증번호를 찾을 수 없습니다.');
+      }
+    },
+    onError: () => {
+      console.error('API 호출 중 오류 발생');
+    }
+  });
+
+
   const handleVerificationButtonClick = async () => {
-    sendPhoneNumberMutation.mutate(user.phoneNumber);
+    isLogin ? sendPhoneNumberMutation2.mutate(user.phoneNumber) : sendPhoneNumberMutation.mutate(user.phoneNumber);
   };
 
 
 
-  //인증번호 일치여부 확인
-  const checkPhoneNumber = async (phoneNumber, verificationCode) => {
+  //인증번호 일치여부 확인(회원가입)
+  const checkPhoneNumber = async ({ phoneNumber, verificationCode }) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/check-code-phone`, {
         phoneNumber,
-        checkNumber: verificationCode,
+        verificationCode,
       });
       return response.data;
     } catch (error) {
@@ -124,19 +163,12 @@ const AuthForm = () => {
     }
   };
 
-  const checkPhoneNumberMutation = useMutation(sendPhoneNumber, {
+  const checkPhoneNumberMutation = useMutation({
+    mutationFn: checkPhoneNumber,
     onSuccess: async (data) => {
       if (data.data) {
         if (!isLogin) {
           setShowVerificationModal(true);
-        } else {
-          const loginResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login`, {
-            email: user.email,
-            password: user.password,
-          });
-
-
-          nav('/');
         }
       } else {
         console.error('인증번호가 일치하지 않습니다.');
@@ -147,13 +179,47 @@ const AuthForm = () => {
     }
   });
 
+
+
+  //인증번호 일치여부 확인(로그인)
+  const checkPhoneNumber2 = async ({ phoneNumber, verificationCode }) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login/phone`, {
+        phoneNumber,
+        verificationCode,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('API 호출이 실패했습니다.');
+    }
+  };
+
+  const checkPhoneNumberMutation2 = useMutation({
+    mutationFn: checkPhoneNumber2,
+    onSuccess: async (data) => {
+      cookie.set("token", data.data.authorization);
+      nav('/home');
+    },
+    onError: () => {
+      console.error('API 호출 중 오류 발생');
+    }
+  });
+
   const handleVerificationConfirm = async () => {
-    checkPhoneNumberMutation.mutate(user.phoneNumber, verificationCode);
+    const requestData = {
+      phoneNumber: user.phoneNumber,
+      verificationCode: inputVerificationCode,
+    };
+
+    if (isLogin) {
+      checkPhoneNumberMutation2.mutate(requestData);
+    } else {
+      checkPhoneNumberMutation.mutate(requestData);
+    }
   };
 
 
-
-
+  //회원가입
   const mutation = useMutation((formData) => {
     return axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
       headers: {

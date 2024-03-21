@@ -13,9 +13,6 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         alterAddress(position);
-      },
-      (error) => {
-        console.error('에러가 발생했습니다.');
       }
     );
   };

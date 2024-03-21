@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { GoHomeFill } from "react-icons/go"; //홈색칠
-import { GoHome } from "react-icons/go";
-import { HiNewspaper } from "react-icons/hi";//동네생활색칠
-import { HiOutlineNewspaper } from "react-icons/hi2";
-import { HiLocationMarker } from "react-icons/hi"; //내근처색칠
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { PiChatsCircleFill } from "react-icons/pi"; //채팅색칠
-import { PiChatsCircle } from "react-icons/pi";
-import { FaUser } from "react-icons/fa6"; //나의당근색칠
-import { FaRegUser } from "react-icons/fa6";
-import { useLocation } from 'react-router-dom';
+import { GoHome, GoHomeFill } from "react-icons/go";
+import { HiOutlineNewspaper, HiNewspaper } from "react-icons/hi";
+import { HiOutlineLocationMarker, HiLocationMarker } from "react-icons/hi";
+import { PiChatsCircle, PiChatsCircleFill } from "react-icons/pi";
+import { FaUser, FaRegUser } from "react-icons/fa";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Footer = () => {
   const location = useLocation();
+  const nav = useNavigate();
   const [footerIcons, setFooterIcons] = useState({
     home: false,
     news: false,
@@ -27,74 +23,77 @@ const Footer = () => {
   }
 
   const handleHomeClick = () => {
-    setFooterIcons(prevState => ({
+    nav("/home");
+    setFooterIcons({
       home: true,
       news: false,
       near: false,
       chat: false,
       mypage: false,
-    }));
+    });
   };
 
   const handleNewsClick = () => {
-    setFooterIcons(prevState => ({
+    nav("/community");
+    setFooterIcons({
       home: false,
       news: true,
       near: false,
       chat: false,
       mypage: false,
-    }));
+    });
   };
   const handleNearClick = () => {
-    setFooterIcons(prevState => ({
+    setFooterIcons({
       home: false,
       news: false,
       near: true,
       chat: false,
       mypage: false,
-    }));
+    });
   };
   const handleChatClick = () => {
-    setFooterIcons(prevState => ({
+    setFooterIcons({
       home: false,
       news: false,
       near: false,
       chat: true,
       mypage: false,
-    }));
+    });
   };
   const handleMypageClick = () => {
-    setFooterIcons(prevState => ({
+    nav("/mypage");
+    setFooterIcons({
       home: false,
       news: false,
       near: false,
       chat: false,
       mypage: true,
-    }));
+    });
   };
 
   return (
     <FooterContainer>
-      <FooterItem onClick={handleHomeClick}>
+      <FooterButton onClick={handleHomeClick}>
         {footerIcons.home ? <GoHomeFill style={{ fontSize: '30px' }} /> : <GoHome style={{ fontSize: '30px' }} />}
         <span>홈</span>
-      </FooterItem>
-      <FooterItem onClick={handleNewsClick}>
+      </FooterButton>
+      <FooterButton onClick={handleNewsClick}>
         {footerIcons.news ? <HiNewspaper style={{ fontSize: '30px' }} /> : <HiOutlineNewspaper style={{ fontSize: '30px' }} />}
         <span>동네생활</span>
-      </FooterItem>
-      <FooterItem onClick={handleNearClick}>
+      </FooterButton>
+      <FooterButton onClick={handleNearClick}>
         {footerIcons.near ? <HiLocationMarker style={{ fontSize: '30px' }} /> : <HiOutlineLocationMarker style={{ fontSize: '30px' }} />}
         <span>내근처</span>
-      </FooterItem>
-      <FooterItem onClick={handleChatClick}>
+      </FooterButton>
+      <FooterButton onClick={handleChatClick}>
         {footerIcons.chat ? <PiChatsCircleFill style={{ fontSize: '30px' }} /> : <PiChatsCircle style={{ fontSize: '30px' }} />}
         <span>채팅</span>
-      </FooterItem>
-      <FooterItem onClick={handleMypageClick}>
+      </FooterButton>
+      <FooterButton onClick={handleMypageClick}>
         {footerIcons.mypage ? <FaUser style={{ fontSize: '30px' }} /> : <FaRegUser style={{ fontSize: '30px' }} />}
         <span>나의당근</span>
-      </FooterItem>
+      </FooterButton>
     </FooterContainer>
   );
 };
@@ -113,7 +112,7 @@ const FooterContainer = styled.div`
   z-index: 1000;
 `;
 
-const FooterItem = styled.div`
+const FooterButton = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,8 +121,14 @@ const FooterItem = styled.div`
   margin: 0 10px;
   font-size: 16px;
   cursor: pointer;
+  border: none;
+  background-color: transparent;
 
   span {
     font-size: 13px;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
