@@ -48,6 +48,7 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
     console.log('address: ', address);
     onSubmit({ address });
     onClose();
+
   };
 
   return (

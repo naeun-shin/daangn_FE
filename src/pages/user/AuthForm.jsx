@@ -32,6 +32,9 @@ const AuthForm = () => {
       ...user,
       address,
     })
+
+    localStorage.setItem('address', address);
+
     setShowAddressModal(false);
   }
 
@@ -122,11 +125,17 @@ const AuthForm = () => {
   };
 
   const checkPhoneNumberMutation = useMutation(sendPhoneNumber, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.data) {
         if (!isLogin) {
           setShowVerificationModal(true);
         } else {
+          const loginResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login`, {
+            email: user.email,
+            password: user.password,
+          });
+
+
           nav('/');
         }
       } else {
@@ -195,7 +204,7 @@ const AuthForm = () => {
 
   return (
     <div>
-      {showAddressModal && <AddressModal isOpen={true} onClose={() => setShowAddressModal(false)} onSubmit={handleSubmitAddressModal} />}
+      {!isLogin && <AddressModal isOpen={showAddressModal} onClose={() => setShowAddressModal(false)} onSubmit={handleSubmitAddressModal} />}
       <div style={{ fontSize: '30px', marginBottom: '50px', cursor: 'pointer' }} onClick={() => { nav(-1) }}>&lt;</div>
       <div style={{ marginLeft: '15px' }}>
         <HelloSpan>안녕하세요!</HelloSpan><br />
@@ -214,12 +223,10 @@ const AuthForm = () => {
         <ErrorMessage>{errorMessage}</ErrorMessage>
         {showVerificationButton && (
           <>
-            {/* 인증번호 입력란 */}
             <TelInput type='text' placeholder='인증번호 입력'
               value={inputVerificationCode}
               onChange={(e) => setInputVerificationCode(e.target.value)} />
             <p style={{ fontSize: '14px', margin: '2px 0 14px 18px' }}>어떤 경우에도 타인에게 공유하지 마세요!</p>
-            {/* 인증번호 확인 버튼 */}
             <VerificationBtn active='true' onClick={handleVerificationConfirm}>인증번호 확인</VerificationBtn>
           </>
         )}
