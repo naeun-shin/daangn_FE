@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import basicImg from '../../images/basicImg.png';
+import { ImCamera } from "react-icons/im";
 
 const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
   const [nickname, setNickname] = useState('');
@@ -71,7 +72,9 @@ const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
         <p>프로필 설정</p>
         <ProfileImageContainer>
           <ProfileImage src={profileImage ? URL.createObjectURL(profileImage) : basicImg} alt="Profile" />
-          <ProfileImageLabel htmlFor="profileImage" />
+          <ProfileImageLabel htmlFor="profileImage">
+            <ProfileImageIcon><ImCamera /></ProfileImageIcon>
+          </ProfileImageLabel>
           <ProfileImageInput
             type="file"
             id="profileImage"
@@ -140,6 +143,21 @@ const ProfileImageLabel = styled.label`
 
 const ProfileImageInput = styled.input`
   display: none;
+`;
+
+const ProfileImageIcon = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 5px; 
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  opacity: 50%;
+  border-radius: 50%;
+  padding-bottom: 5px;
 `;
 
 const StyledInput = styled.input`

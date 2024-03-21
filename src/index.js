@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Modal from 'react-modal';
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 Modal.setAppElement('#root');
-
+const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <App />
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
 );
 
 

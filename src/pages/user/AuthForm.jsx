@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ProfileModal from './ProfileModal';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import AddressModal from './AddressModal';
 import { Cookies } from 'react-cookie';
@@ -101,7 +101,8 @@ const AuthForm = () => {
   };
 
 
-  const sendPhoneNumberMutation = useMutation(sendPhoneNumber, {
+  const sendPhoneNumberMutation = useMutation({
+    mutationFn: sendPhoneNumber,
     onSuccess: (data) => {
       const match = data.data.match(/\((\d+)\)/);
       if (match) {
@@ -121,7 +122,8 @@ const AuthForm = () => {
     }
   });
 
-  const sendPhoneNumberMutation2 = useMutation(sendPhoneNumber2, {
+  const sendPhoneNumberMutation2 = useMutation({
+    mutationFn: sendPhoneNumber2,
     onSuccess: (data) => {
       const match = data.data.match(/\((\d+)\)/);
       if (match) {
@@ -149,7 +151,7 @@ const AuthForm = () => {
 
 
   //인증번호 일치여부 확인(회원가입)
-  const checkPhoneNumber = async (phoneNumber, verificationCode) => {
+  const checkPhoneNumber = async ({ phoneNumber, verificationCode }) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/check-code-phone`, {
         phoneNumber,
@@ -161,7 +163,8 @@ const AuthForm = () => {
     }
   };
 
-  const checkPhoneNumberMutation = useMutation(checkPhoneNumber, {
+  const checkPhoneNumberMutation = useMutation({
+    mutationFn: checkPhoneNumber,
     onSuccess: async (data) => {
       if (data.data) {
         if (!isLogin) {
@@ -191,7 +194,8 @@ const AuthForm = () => {
     }
   };
 
-  const checkPhoneNumberMutation2 = useMutation(checkPhoneNumber2, {
+  const checkPhoneNumberMutation2 = useMutation({
+    mutationFn: checkPhoneNumber2,
     onSuccess: async (data) => {
       cookie.set("token", data.data.authorization);
       nav('/home');
