@@ -34,8 +34,8 @@ const Button = () => {
   return (
     <>
       <WritingButton
-        isCircle={isCircle}
-        isClicked={isClicked}
+        $isCircle={isCircle}
+        $isClicked={isClicked}
         onClick={handleClick}
       >
         {isClicked ? 'X' : isCircle ? '+' : '+ 글쓰기'}
@@ -62,21 +62,21 @@ const WritingButton = styled.button`
   z-index: 1000;
   transition: all 0.2s ease;
 
-  ${({ isCircle }) =>
-    isCircle &&
+  ${({ $isCircle }) =>
+    $isCircle &&
     css`
       width: 60px;
       height: 60px;
       border-radius: 50%;
     `}
 
-  ${({ isClicked }) =>
-    isClicked &&
+  ${({ $isClicked }) =>
+    $isClicked &&
     css`
       width: 60px;
       height: 60px;
       background-color: #fff;
       color: #000;
-      border-radius:;
+      border-radius: 50%;
     `}
 `;

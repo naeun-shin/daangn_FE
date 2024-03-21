@@ -1,21 +1,7 @@
 import React from 'react';
-import Noti from './pages/Noti';
-import Header from './components/layout/Header';
-import Maincategory from './components/layout/Maincategory';
-import MainItem from './components/layout/MainItem';
-import WritingButton from './components/commons/Button';
-// 여기까지는 메인 홈
-
+import Router from './routes/Router';
 const App = () => {
-  return (
-    <div>
-      <Header />
-      <Maincategory />
-      <MainItem />
-      <WritingButton />
-      <Noti />
-    </div>
-  );
+  return <Router />;
 };
 
 export default App;

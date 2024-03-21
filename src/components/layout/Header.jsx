@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { IoSearchOutline } from 'react-icons/io5';
 import { GoBell } from 'react-icons/go';
 import { SlArrowDown } from 'react-icons/sl';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -15,7 +16,9 @@ const Header = () => {
       </>
       <Icons>
         <IoSearchOutline size='25' />
-        <GoBell size='25' />
+        <BackLink to='/noti'>
+          <GoBell size='25' />
+        </BackLink>
       </Icons>
     </HeaderContainer>
   );
@@ -43,4 +46,8 @@ const Icons = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 30px 25px;
+`;
+
+const BackLink = styled(Link)`
+  color: #000;
 `;

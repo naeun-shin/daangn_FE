@@ -1,12 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from '../pages/Home';
+import Notipage from '../pages/Notipage';
 
 const Router = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route></Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/noti' element={<Notipage />} />
+    </Routes>
   );
 };
 
