@@ -37,6 +37,7 @@ const CommunityDetail = () => {
   const handleGoBackClick = () => {
     navigate(-1);
   };
+  
   return (
     <>
       <Header>

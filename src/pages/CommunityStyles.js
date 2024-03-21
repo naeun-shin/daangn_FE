@@ -41,12 +41,10 @@ const CommunityContent = styled.div`
   color: gray;
 `;
 
-const CommunityImage = styled.div`
-  background-image: url(${TEST1});
-  background-size: cover;
-  width: 60px;
-  height: 60px;
-  /* border: 1px solid black; */
+const CommunityImage = styled.img`
+  padding-top: 5px;
+  width: 50px;
+  height: 50px;
   border-radius: 5px;
   float: right;
 `;
@@ -109,7 +107,6 @@ const CommunityDetailTitle = styled.div`
 const CommunityDetailContent = styled.div`
   width: auto;
   height: auto;
-  /* border: 1px solid black; */
   padding: 5px;
 `;
 
@@ -161,18 +158,16 @@ const CommunityLike = styled.div`
 
 const CommunityDetailFirstComment = styled.div`
   margin: 5px 0px 0px 35px;
-  /* border: 1px solid black; */
 `;
 const CommunityDetailSecondCommentBox = styled.div`
   padding: 10px;
   margin-left: 35px;
-  /* border: 1px solid black; */
 `;
 
-const CommunityWriteBox = styled.div`
-  /* padding: 10px; */
-`;
+const CommunityWriteBox = styled.div``;
+const CommunityWriteCategory = styled.div``;
 
+const CommunityCateogyList = styled.div``;
 const CommunityWriteTitle = styled.input`
   width: 97%;
   height: 5vh;
@@ -191,7 +186,7 @@ const CommunityWriteContent = styled.textarea`
   width: 97%;
   height: 70vh;
   font-size: 16px;
-  color: #d3d3d359;
+  color: gray;
   padding: 5px 3px;
   resize: none;
   line-height: 1.5;
@@ -204,7 +199,18 @@ const CommunityWriteFooter = styled.div`
   height: 2vh;
   padding: 5px 0px;
   p {
-    font-size: 14px;
+    font-size: 12px;
+  }
+  label {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+  }
+  button {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
   }
 `;
 
@@ -225,14 +231,11 @@ const Footer = styled.div`
 
 const FooterLeft = styled.div`
   margin-left: 5px;
-  /* padding: 2px; */
 `;
-
 const CommunityDetailImage = styled.img.attrs((props) => ({
   src: props.src,
 }))`
   border-radius: 10px;
-  /* border: 1px solid black; */
   width: 100%;
   margin: 5px 0px;
 `;
@@ -267,6 +270,8 @@ export {
   CommunityWriteFooter,
   CommunityWriteBox,
   UserName,
+  CommunityWriteCategory,
+  CommunityCateogyList,
   Footer,
   FooterLeft,
 };
