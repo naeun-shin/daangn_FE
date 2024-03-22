@@ -9,6 +9,7 @@ import Home from '../pages/Home';
 import Community from '../pages/Community';
 import CommunityCreate from "../pages/community/CommunityCreate";
 import CommunityDetail from "../pages/community/CommunityDetail";
+import SellPage from '../pages/Sellpage';
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
         <Route path="/communityCreate" element={<CommunityCreate />} />
         <Route path="/CommunityDetail/:id" element={<CommunityDetail />} />
         <Route path="/mypage" element={<MypageMain />} />
+        <Route path='/Sellpage' element={<SellPage />} />
       </Routes>
       <Footer />
     </BrowserRouter >

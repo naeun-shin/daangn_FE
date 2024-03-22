@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Modal 컴포넌트
 const Modal = () => {
+  const navigate = useNavigate();
+
+  const goToSellPage = () => {
+    navigate('/Sellpage');
+  };
+
   return ReactDOM.createPortal(
     <Modaldrop>
       <ModalWrapper>
@@ -13,7 +20,7 @@ const Modal = () => {
           <MenuItem>생활/가전</MenuItem>
           <MenuItem>게임/스포츠</MenuItem>
         </ModalContainer>
-        <SellButton>내 물건 팔기</SellButton>
+        <SellButton onClick={goToSellPage}>내 물건 팔기</SellButton>
       </ModalWrapper>
     </Modaldrop>,
     document.getElementById('modal-root')
