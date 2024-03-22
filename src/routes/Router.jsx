@@ -50,7 +50,7 @@ const Router = () => {
           element={<SellPage />}
         />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 };
