@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   CommunityTitle,
   CommunityContent,
@@ -8,21 +11,22 @@ import {
   CommunitySubBox,
   CommunityContainer,
   Header,
-} from "../CommunityStyles";
-import { useNavigate } from "react-router-dom";
-import { GoThumbsup } from "react-icons/go";
-import { IoChatbubbleOutline } from "react-icons/io5";
-import { useQuery } from "@tanstack/react-query";
-import { getCommunityList } from "../../apis/communityAxios";
+} from '../CommunityStyles';
+import { useNavigate } from 'react-router-dom';
+import { GoThumbsup } from 'react-icons/go';
+import { IoChatbubbleOutline } from 'react-icons/io5';
+import { useQuery } from '@tanstack/react-query';
+import { getCommunityList } from '../../apis/communityAxios';
 
 const CommunityList = () => {
   const navigate = useNavigate();
   const [isAsc, setIsAsc] = useState(true);
   const [page, setPage] = useState(1);
-  const [contentArray, setContentArray] = useState([]);
+  const [contentArray, setContentArray] =
+    useState([]);
 
   const { data } = useQuery({
-    queryKey: ["community", isAsc, page],
+    queryKey: ['community', isAsc, page],
     queryFn: () => getCommunityList(isAsc, page),
   });
   console.log(data);
@@ -47,15 +51,25 @@ const CommunityList = () => {
         {contentArray.map((item) => (
           <CommunityContainer
             key={item.communityId}
-            onClick={() => handleGoToDetailClick(item.communityId)}
+            onClick={() =>
+              handleGoToDetailClick(
+                item.communityId,
+              )
+            }
           >
             <CommunityBox>
               <div>
-                <CommunityTitle>{item.title}</CommunityTitle>
-                <CommunityContent>{item.content}</CommunityContent>
+                <CommunityTitle>
+                  {item.title}
+                </CommunityTitle>
+                <CommunityContent>
+                  {item.content}
+                </CommunityContent>
               </div>
               {!item.communityImage ? null : (
-                <CommunityImage src={item.communityImage.url} />
+                <CommunityImage
+                  src={item.communityImage.url}
+                />
               )}
             </CommunityBox>
             <CommunitySubBox>
