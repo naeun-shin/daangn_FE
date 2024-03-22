@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import styled, { css } from 'styled-components';
 import Modal from './MainModal';
+import { useNavigate } from 'react-router-dom';
 
-const Button = () => {
+const Button = ({ isCommunity }) => {
+  const navigate = useNavigate();
+  console.log(isCommunity);
   const [isCircle, setIsCircle] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [isClicked, setIsClicked] =
+    useState(false);
+  const [showModal, setShowModal] =
+    useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,11 +24,17 @@ const Button = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+    );
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener(
+        'scroll',
+        handleScroll,
+      );
     };
   }, []);
 
@@ -28,19 +42,42 @@ const Button = () => {
     setIsClicked(!isClicked);
     setShowModal(!showModal);
     // 모달이 표시될 때 body 스크롤을 방지
-    document.body.style.overflow = showModal ? 'auto' : 'hidden';
+    document.body.style.overflow = showModal
+      ? 'auto'
+      : 'hidden';
   };
-
+  const handleWriteClick = () => {
+    navigate('/communityCreate');
+  };
   return (
     <>
-      <WritingButton
-        $isCircle={isCircle}
-        $isClicked={isClicked}
-        onClick={handleClick}
-      >
-        {isClicked ? 'X' : isCircle ? '+' : '+ 글쓰기'}
-      </WritingButton>
-      {showModal && <Modal />}
+      {isCommunity ? (
+        <>
+          {' '}
+          <WritingButton
+            $isCircle={isCircle}
+            $isClicked={isClicked}
+            onClick={handleWriteClick}
+          >
+            글쓰기
+          </WritingButton>
+        </>
+      ) : (
+        <>
+          <WritingButton
+            $isCircle={isCircle}
+            $isClicked={isClicked}
+            onClick={handleClick}
+          >
+            {isClicked
+              ? 'X'
+              : isCircle
+                ? '+'
+                : '+ 글쓰기'}
+          </WritingButton>
+          {showModal && <Modal />}
+        </>
+      )}
     </>
   );
 };

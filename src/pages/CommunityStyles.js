@@ -190,7 +190,7 @@ const CommunityWriteContent = styled.textarea`
   display: flex;
   align-items: center;
   width: 97%;
-  height: 70vh;
+  height: 50vh;
   font-size: 16px;
   color: gray;
   padding: 5px 3px;
@@ -262,6 +262,40 @@ const ModalContent = styled.div`
     padding: 10px;
   }
 `;
+
+// 모달 배경 스타일
+const ModalDeleteContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.25
+  ); /* 흐림 효과를 위한 반투명 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* 다른 요소들 위에 띄우기 위한 z-index 설정 */
+`;
+
+// 모달 내용 스타일
+const ModalDeleteContent = styled.div`
+  background-color: white; /* 하얀 배경 */
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+// 모달 삭제 버튼 스타일
+const DeleteButton = styled.button`
+  /* 여기에 버튼 스타일을 추가하세요 */
+`;
+// 모달 삭제 취소 버튼 스타일
+const CancelButton = styled.button``;
+
 const FooterLeft = styled.div`
   margin-left: 5px;
 `;
@@ -312,4 +346,8 @@ export {
   FooterLeft,
   ModalContainer,
   ModalContent,
+  ModalDeleteContainer,
+  ModalDeleteContent,
+  DeleteButton,
+  CancelButton,
 };

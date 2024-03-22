@@ -13,6 +13,7 @@ import Home from '../pages/home';
 import Community from '../pages/Community';
 import CommunityCreate from '../pages/community/CommunityCreate';
 import CommunityDetail from '../pages/community/CommunityDetail';
+import CommunityUpdate from '../pages/community/CommunityUpdate';
 
 const Router = () => {
   return (
@@ -39,6 +40,10 @@ const Router = () => {
         <Route
           path="/communityDetail/:id"
           element={<CommunityDetail />}
+        />
+        <Route
+          path="/communityUpdate/:id"
+          element={<CommunityUpdate />}
         />
         <Route
           path="/mypage"

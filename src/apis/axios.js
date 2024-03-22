@@ -6,6 +6,6 @@ export const instance = axios.create({
     'content-type':
       'application/json;charset=UTF-8',
     accept: 'application/json,',
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTA1Njc4MTIzNCIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0NjY5OTQ2LCJpYXQiOjE3MTEwNjk5NDZ9.mZBAEiLdQizhGnZuxwFgPkN2YKvETt_ag_8rGnHkPDc`,
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTA1Njc4MTIzNCIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0NzMwNjM3LCJpYXQiOjE3MTExMzA2Mzd9.V5vhk5mGEmzoTXpSHWHyPXukZ2LrjnVJ1bRNO6DSrU0`,
   },
 });

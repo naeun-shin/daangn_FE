@@ -23,6 +23,10 @@ import {
   FooterLeft,
   ModalContainer,
   ModalContent,
+  ModalDeleteContainer,
+  ModalDeleteContent,
+  DeleteButton,
+  CancelButton,
 } from '../CommunityStyles';
 import {
   useNavigate,
@@ -38,8 +42,8 @@ import { AiOutlinePicture } from 'react-icons/ai';
 import { BiMap } from 'react-icons/bi';
 import { HiPaperAirplane } from 'react-icons/hi2';
 import {
-  useMutation,
   useQuery,
+  useMutation,
 } from '@tanstack/react-query';
 import {
   deleteCommunity,
@@ -49,9 +53,6 @@ import { CiMenuKebab } from 'react-icons/ci';
 import { PiExport } from 'react-icons/pi';
 import { GoBellFill } from 'react-icons/go';
 import { MdArrowBackIos } from 'react-icons/md';
-import styled, {
-  keyframes,
-} from 'styled-components';
 
 const CommunityDetail = () => {
   const navigate = useNavigate();
@@ -59,16 +60,15 @@ const CommunityDetail = () => {
   const [isDeleteOpen, setIsDeleteOpen] =
     useState(false);
 
-  const { id } = useParams();
+  const param = useParams();
+  const communityId = param.id;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['community', id],
-    queryFn: async () => {
-      const response =
-        await getCommunityDetail(id);
-      return response;
-    },
+    queryKey: ['community', communityId],
+    queryFn: () => getCommunityDetail(communityId),
   });
+
+  const detailList = data;
 
   const deleteCommunityContent = useMutation({
     mutationFn: deleteCommunity,
@@ -82,16 +82,6 @@ const CommunityDetail = () => {
       console.log('삭제 실패 : ', error);
     },
   });
-
-  if (isLoading) {
-    return <div> is Loading ...</div>;
-  } else if (isError) {
-    return <div> is Error </div>;
-  }
-
-  const detailList = data.data;
-  const detailImage =
-    detailList.communityImageList;
 
   // createdAt을 현재일로부터 몇일 전인지 계산하는 함수
   const calculateDaysAgo = (createdAt) => {
@@ -127,43 +117,21 @@ const CommunityDetail = () => {
   };
   // 삭제 버튼
   const handleDeleteClick = () => {
-    console.log(id);
-    deleteCommunityContent.mutate(id);
+    // console.log(id);
+    // deleteCommunityContent.mutate(id);
   };
-  // 흐림 효과를 위한 keyframes
 
-  // 모달 배경 스타일
-  const ModalDeleteContainer = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(
-      0,
-      0,
-      0,
-      0.25
-    ); /* 흐림 효과를 위한 반투명 배경 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999; /* 다른 요소들 위에 띄우기 위한 z-index 설정 */
-  `;
-
-  // 모달 내용 스타일
-  const ModalDeleteContent = styled.div`
-    background-color: white; /* 하얀 배경 */
-    padding: 20px;
-    border-radius: 10px;
-  `;
-
-  // 모달 삭제 버튼 스타일
-  const DeleteButton = styled.button`
-    /* 여기에 버튼 스타일을 추가하세요 */
-  `;
-  // 모달 삭제 취소 버튼 스타일
-  const CancelButton = styled.button``;
+  const handleUpdateClick = () => {
+    console.log(communityId);
+    navigate(`/communityUpdate/${communityId}`);
+  };
+  if (isLoading) {
+    return <div>is Loding...</div>;
+  } else if (isError) {
+    return (
+      <div> Error occured during fetching...</div>
+    );
+  }
   return (
     <>
       <Header>
@@ -205,16 +173,18 @@ const CommunityDetail = () => {
             <div>{detailList.contents}</div>
             {}
 
-            {detailImage.map((image, index) => (
-              <div key={index}>
-                {!image ? null : (
-                  <CommunityDetailImage
-                    src={image.url}
-                    alt={`Image ${index}`}
-                  />
-                )}
-              </div>
-            ))}
+            {detailList.communityImageList.map(
+              (image, index) => (
+                <div key={index}>
+                  {!image ? null : (
+                    <CommunityDetailImage
+                      src={image.url}
+                      alt={`Image ${index}`}
+                    />
+                  )}
+                </div>
+              ),
+            )}
             <CommunityCountBox>
               <FaRegEye /> &nbsp; 555명이 봤어요
             </CommunityCountBox>
@@ -317,7 +287,16 @@ const CommunityDetail = () => {
       <ModalContainer isOpen={isOpen}>
         <ModalContent>
           {/* 모달 내용 */}
-          <button>수정</button>
+          <button
+            onClick={() =>
+              handleUpdateClick(
+                detailList.communityImageList,
+                detailList,
+              )
+            }
+          >
+            수정
+          </button>
           <LightBreak />
           <button
             onClick={handleOpenDeleteModalClick}

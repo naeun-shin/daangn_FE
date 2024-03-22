@@ -1,4 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   Container,
   Header,
@@ -8,19 +11,31 @@ import {
   CommunityWriteBox,
   CommunityWriteCategory,
   CommunityCateogyList,
-} from '../CommunityStyles';
+} from '../CommunityStyles.js';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiMap } from 'react-icons/bi';
 import { LightBreak } from '../styles/commonStyles.js';
 import { VscClose } from 'react-icons/vsc';
-import { useMutation } from '@tanstack/react-query';
-import { createCommunity } from '../../apis/communityAxios.js';
-import { useNavigate } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+import {
+  getCommunityDetail,
+  updateCommunity,
+} from '../../apis/communityAxios.js';
+import {
+  useQuery,
+  useMutation,
+} from '@tanstack/react-query';
+// import { useMutation } from '@react-query';
 
-const CommunityCreate = () => {
+const CommunityUpdate = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [contents, setContents] = useState('');
+  const [imagePreview, setImagePreview] =
+    useState('');
   const [selectedImage, setSelectedImage] =
     useState('');
   const [address, setAddress] = useState(
@@ -28,6 +43,9 @@ const CommunityCreate = () => {
   );
   const [showOptions, setShowOptions] =
     useState(false);
+  const [communityId, setCommunityId] =
+    useState('');
+
   const communityCategory = [
     '동네질문',
     '생활정보',
@@ -43,12 +61,39 @@ const CommunityCreate = () => {
     setShowOptions(false);
   };
 
+  const { id } = useParams();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['community', id],
+    queryFn: () => getCommunityDetail(id),
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTitle(data.title);
+      setContents(data.contents);
+      setSelectedImage(data.communityImageList);
+      setAddress(data.address);
+      setSelectedOption(data.category);
+      setCommunityId(data.communityId);
+    }
+  }, [data]);
+
+  const newCommunityValue = {
+    category: selectedOption,
+    title,
+    contents,
+    selectedImage,
+    address,
+    communityId,
+  };
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
 
   const handleContentChange = (e) => {
-    setContent(e.target.value);
+    setContents(e.target.value);
   };
   const handleImageChange = (e) => {
     console.log(e);
@@ -58,22 +103,12 @@ const CommunityCreate = () => {
       setSelectedImage(reader.result); // 선택된 파일의 URL을 상태에 저장
     };
     reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
+    // Set image preview
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleImageRemove = () => {
-    setSelectedImage(null);
-  };
-
-  const communityValue = {
-    category: selectedOption,
-    title,
-    content,
-    selectedImage,
-    address,
-  };
-
-  const communityCreateMutation = useMutation({
-    mutationFn: createCommunity,
+  const communityUpdateMutation = useMutation({
+    mutationFn: updateCommunity,
     onSuccess: (response) => {
       console.log(response);
     },
@@ -82,11 +117,14 @@ const CommunityCreate = () => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const handleUpadateSubmit = (e) => {
     e.preventDefault();
-    console.log(communityValue);
-    communityCreateMutation.mutate(
-      communityValue,
+    console.log(
+      'updateNewCommunityValue',
+      newCommunityValue,
+    );
+    communityUpdateMutation.mutate(
+      newCommunityValue,
     );
   };
 
@@ -103,7 +141,7 @@ const CommunityCreate = () => {
             onClick={handleGoBackClick}
           />
           <div>동네생활 글쓰기</div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleUpadateSubmit}>
             <button type="submit">완료 </button>
           </form>
         </Header>
@@ -142,22 +180,34 @@ const CommunityCreate = () => {
           </CommunityWriteCategory>
           <CommunityWriteTitle
             placeholder="제목을 입력하세요."
-            onChange={handleTitleChange}
             value={title}
-          ></CommunityWriteTitle>
+            onChange={handleTitleChange}
+          />
           <CommunityWriteContent
             placeholder="동네 근처 이웃과 동네에서의 소소한 일상, 정보를 공유해보세요."
             onChange={handleContentChange}
-            value={content}
-          ></CommunityWriteContent>
+            value={contents}
+          />
           <div>
-            <img
-              src={selectedImage}
-              style={{ width: '25px' }}
-            />
-            <button onClick={handleImageRemove}>
-              X
-            </button>
+            {data.communityImageList ? (
+              data.communityImageList.map(
+                (image, index) => (
+                  <img
+                    key={index}
+                    src={image.url}
+                    style={{ width: '25px' }}
+                    alt={`Image ${index}`}
+                  />
+                ),
+              )
+            ) : (
+              <img
+                src={selectedImage}
+                style={{ width: '25px' }}
+                alt="selected"
+              />
+            )}
+            <button>X</button>
           </div>
         </CommunityWriteBox>
         <LightBreak />
@@ -179,4 +229,4 @@ const CommunityCreate = () => {
   );
 };
 
-export default CommunityCreate;
+export default CommunityUpdate;

@@ -29,6 +29,7 @@ const CommunityList = () => {
     queryKey: ['community', isAsc, page],
     queryFn: () => getCommunityList(isAsc, page),
   });
+  
   console.log(data);
   useEffect(() => {
     if (data) {
