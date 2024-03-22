@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import styled, { css } from 'styled-components';
 import Modal from './MainModal';
 
 const Button = () => {
   const [isCircle, setIsCircle] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [isClicked, setIsClicked] =
+    useState(false);
+  const [showModal, setShowModal] =
+    useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,19 +21,34 @@ const Button = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+    );
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener(
+        'scroll',
+        handleScroll,
+      );
     };
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = showModal
+      ? 'hidden'
+      : 'auto';
+
+    // 컴포넌트 언마운트 / 모달 닫힐 때 스크롤 되도록 설정!
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showModal]);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
     setShowModal(!showModal);
-    // 모달이 표시될 때 body 스크롤을 방지
-    document.body.style.overflow = showModal ? 'auto' : 'hidden';
   };
 
   return (
@@ -38,7 +58,11 @@ const Button = () => {
         $isClicked={isClicked}
         onClick={handleClick}
       >
-        {isClicked ? 'X' : isCircle ? '+' : '+ 글쓰기'}
+        {isClicked
+          ? 'X'
+          : isCircle
+            ? '+'
+            : '+ 글쓰기'}
       </WritingButton>
       {showModal && <Modal />}
     </>
