@@ -1,6 +1,6 @@
-import React from 'react'
-import AuthForm from './AuthForm'
-import AddressModal from './AddressModal'
+import React from 'react';
+import AuthForm from './AuthForm';
+// import AddressModal from './AddressModal'
 
 const UserMain = () => {
   return (
@@ -8,7 +8,7 @@ const UserMain = () => {
       {/* <AddressModal /> */}
       <AuthForm />
     </div>
-  )
-}
+  );
+};
 
-export default UserMain
+export default UserMain;
