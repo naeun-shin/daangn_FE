@@ -1894,17 +1894,17 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@tanstack/query-core@5.28.4":
-  version "5.28.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.28.4.tgz#fa416532f8b33ca8608d40bb9728b60e2e1a38dc"
-  integrity sha512-uQZqOFqLWUvXNIQZ63XdKzg22NtHzgCBUfDmjDHi3BoF+nUYeBNvMi/xFPtFrMhqRzG2Ir4mYaGsWZzmiEjXpA==
+"@tanstack/query-core@5.28.6":
+  version "5.28.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.28.6.tgz#a3bdb108f9f8d4e2ba3163068dbe6ff55b905a81"
+  integrity sha512-hnhotV+DnQtvtR3jPvbQMPNMW4KEK0J4k7c609zJ8muiNknm+yoDyMHmxTWM5ZnlZpsz0zOxYFr+mzRJNHWJsA==
 
-"@tanstack/react-query@^5.28.4":
-  version "5.28.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.28.4.tgz#32e56ca4fd08513a906fe6323908f0e38ffccbba"
-  integrity sha512-BErcoB/QQG6YwLSUKnaGxF+lSc270RH2w3kMBpG0i4YzDCsFs2pdxPX1WVknQvFk9bNgukMb158hc2Zb4SdwSA==
+"@tanstack/react-query@^5.28.6":
+  version "5.28.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.28.6.tgz#0d52b0a98a1d842debf9c65496e20a9981a23bc4"
+  integrity sha512-/DdYuDBSsA21Qbcder1R8Cr/3Nx0ZnA2lgtqKsLMvov8wL4+g0HBz/gWYZPlIsof7iyfQafyhg4wUVUsS3vWZw==
   dependencies:
-    "@tanstack/query-core" "5.28.4"
+    "@tanstack/query-core" "5.28.6"
 
 "@testing-library/dom@^8.5.0":
   version "8.20.1"
@@ -8290,6 +8290,11 @@ react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
+
+react-hook-form@^7.51.1:
+  version "7.51.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.51.1.tgz#3ce5f8b5ef41903b4054a641cef8c0dc8bf8ae85"
+  integrity sha512-ifnBjl+kW0ksINHd+8C/Gp6a4eZOdWyvRv0UBaByShwU8JbVx5hTcTWEcd5VdybvmPTATkVVXk9npXArHmo56w==
 
 react-icons@^5.0.1:
   version "5.0.1"
