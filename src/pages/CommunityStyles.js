@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import bear from "../images/bear.png";
-import TEST1 from "../images/TEST1.jpg";
+import styled from 'styled-components';
+import bear from '../images/bear.png';
+import TEST1 from '../images/TEST1.jpg';
 
 const Header = styled.div`
   height: 100px;
@@ -16,6 +16,12 @@ const Header = styled.div`
     font-size: 16px;
     font-weight: bold;
   }
+`;
+
+const HeaderRight = styled.div`
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
 `;
 const CommunityWrapper = styled.div`
   overflow: auto;
@@ -184,7 +190,7 @@ const CommunityWriteContent = styled.textarea`
   display: flex;
   align-items: center;
   width: 97%;
-  height: 70vh;
+  height: 50vh;
   font-size: 16px;
   color: gray;
   padding: 5px 3px;
@@ -229,18 +235,82 @@ const Footer = styled.div`
   }
 `;
 
+const ModalContainer = styled.div`
+  position: fixed;
+  bottom: ${({ isOpen }) =>
+    isOpen
+      ? '0'
+      : '-100%'}; // 모달이 열리면 아래에서 위로 올라오게 설정
+  left: 0;
+  width: 100%;
+  height: 20%; // 모달 높이 설정
+  background-color: white;
+  transition: bottom 1s ease; // 모달 열림/닫힘 애니메이션 효과
+  z-index: 999; // 다른 요소 위에 나타나도록 설정
+`;
+
+const ModalContent = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  /* align-items: center; */
+  button {
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+  }
+`;
+
+// 모달 배경 스타일
+const ModalDeleteContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.25
+  ); /* 흐림 효과를 위한 반투명 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* 다른 요소들 위에 띄우기 위한 z-index 설정 */
+`;
+
+// 모달 내용 스타일
+const ModalDeleteContent = styled.div`
+  background-color: white; /* 하얀 배경 */
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+// 모달 삭제 버튼 스타일
+const DeleteButton = styled.button`
+  /* 여기에 버튼 스타일을 추가하세요 */
+`;
+// 모달 삭제 취소 버튼 스타일
+const CancelButton = styled.button``;
+
 const FooterLeft = styled.div`
   margin-left: 5px;
 `;
-const CommunityDetailImage = styled.img.attrs((props) => ({
-  src: props.src,
-}))`
+const CommunityDetailImage = styled.img.attrs(
+  (props) => ({
+    src: props.src,
+  }),
+)`
   border-radius: 10px;
   width: 100%;
   margin: 5px 0px;
 `;
 export {
   Header,
+  HeaderRight,
   Container,
   CommunityWrapper,
   CommunityContainer,
@@ -274,4 +344,10 @@ export {
   CommunityCateogyList,
   Footer,
   FooterLeft,
+  ModalContainer,
+  ModalContent,
+  ModalDeleteContainer,
+  ModalDeleteContent,
+  DeleteButton,
+  CancelButton,
 };
