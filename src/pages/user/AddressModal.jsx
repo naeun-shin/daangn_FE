@@ -1,12 +1,16 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { TbViewfinder } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
+import { IoIosArrowBack } from "react-icons/io";
+
+
 
 const AddressModal = ({ isOpen, onClose, onSubmit }) => {
   const [address, setAddress] = useState('');
+  const [results, setResults] = useState([]);
   const nav = useNavigate();
 
   const getCurrentLocation = () => {
@@ -16,7 +20,6 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
       }
     );
   };
-
 
   /* 카카오지도 API로 현재 유저 좌표를 동단위로 변환 */
   const alterAddress = (position) => {
@@ -41,11 +44,40 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
   };
 
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (address.trim() !== '') {
+        handleSearch();
+      } else {
+        setResults([])
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [address]);
+
   const handleSubmit = () => {
-    console.log('address: ', address);
     onSubmit({ address });
     onClose();
+  };
 
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/address/search?partialAddress=${encodeURIComponent(address.trim())}`);
+      const data = response.data;
+      if (data && data.length > 0) {
+        setResults(data);
+      } else {
+        console.error('검색 결과가 없습니다.');
+      }
+    } catch (error) {
+      console.error('검색 요청 중 오류 발생:', error);
+    }
+  };
+
+  const handleResultClick = (selectedAddress) => {
+    setAddress(selectedAddress);
+    setResults([]);
   };
 
   return (
@@ -71,12 +103,13 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
           backgroundColor: 'white',
           border: 'none',
           padding: 0,
+          borderRadius: 0
         }
       }}
     >
       <ModalContent>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <div style={{ fontSize: '30px', cursor: 'pointer', marginRight: '20px' }} onClick={() => { nav(-1) }}>&lt;</div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center', margin: '20px auto' }}>
+          <div style={{ fontSize: '30px', cursor: 'pointer', marginRight: '20px', alignItems: 'center' }} onClick={() => { nav(-1) }}><IoIosArrowBack /></div>
           <StyledInput
             type="text"
             placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
@@ -84,6 +117,15 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setAddress(e.target.value)}
           />
         </div>
+        {results.length > 0 && (
+          <SearchResults>
+            {results.map((result, index) => (
+              <ResultItem key={index} onClick={() => handleResultClick(result.address_name)}>
+                {result.address_name}
+              </ResultItem>
+            ))}
+          </SearchResults>
+        )}
         <CurrentLocationButton active='true' onClick={getCurrentLocation}><TbViewfinder />&nbsp;현재 위치로 찾기</CurrentLocationButton>
         <div style={{ textAlign: 'left', marginLeft: '18px' }}>
           <p>근처 동네</p>
@@ -108,7 +150,6 @@ const ModalContent = styled.div`
 `;
 
 const StyledInput = styled.input`
-  margin-bottom: 20px;
   height: 40px;
   width: 80%;
   border-radius: 5px;
@@ -143,4 +184,26 @@ const CurrentLocationButton = styled.button`
     margin: 0 auto 15px;
     font-size: 20px;
     pointer-events: ${(props) => (props.active === 'true' ? 'auto' : 'none')};
+`;
+
+const SearchResults = styled.div`
+  position: absolute;
+  top: 65px;
+  left: 60px;
+  width: 81%;
+  overflow-y: auto;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: white;
+  z-index: 999;
+`;
+
+const ResultItem = styled.div`
+  padding: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
