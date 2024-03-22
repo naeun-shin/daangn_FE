@@ -1,26 +1,41 @@
-import { instance } from "./axios";
+import { instance } from './axios';
 
-export const getCommunityList = async (isAsc, page) => {
-  console.log(isAsc, page);
+export const getCommunityList = async (
+  isAsc,
+  page,
+) => {
   try {
-    const response = await instance.get("/community", {
-      params: { isAsc, page },
-    });
+    const response = await instance.get(
+      '/community',
+      {
+        params: { isAsc, page },
+      },
+    );
     return response.data;
   } catch (error) {
-    throw new Error("failed to fetch community data");
+    throw new Error(
+      'failed to fetch community data',
+    );
   }
 };
 
-export const createCommunity = async (communityValue) => {
+export const createCommunity = async (
+  communityValue,
+) => {
   console.log(communityValue);
   try {
-    const { category, title, content, selectedImage, address } = communityValue;
+    const {
+      category,
+      title,
+      content,
+      selectedImage,
+      address,
+    } = communityValue;
     const formData = new FormData();
-    formData.append("files", selectedImage); // 이미지를 FormData에 추가
+    formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
     formData.append(
-      "CommunityRequestDto",
+      'CommunityRequestDto',
       JSON.stringify({
         category,
         title,
@@ -29,12 +44,16 @@ export const createCommunity = async (communityValue) => {
       }),
     );
     // FormData에는 이미지와 JSON 데이터가 함께 포함되어 있음
-
-    await instance.post("/community", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const response = await instance.post(
+      '/community',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
+    );
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -42,7 +61,22 @@ export const createCommunity = async (communityValue) => {
 
 export const getCommunityDetail = async (id) => {
   try {
-    const response = await instance.get(`/community/${id}`);
+    const response = await instance.get(
+      `/community/${id}`,
+    );
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteCommunity = async (id) => {
+  console.log(id);
+  try {
+    const response = await instance.delete(
+      `/community/${id}`,
+    );
     console.log(response);
     return response;
   } catch (error) {
