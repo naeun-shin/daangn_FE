@@ -28,9 +28,6 @@ import { getCommunityComment } from '../../apis/communityAxios';
 const CommunityComent = ({ communityId }) => {
   const [isAsc, setIsAsc] = useState(true);
   const [page, setPage] = useState(1);
-  console.log(communityId);
-
-  // 댓글 데이터 가져오는 custom hook 사용
 
   const { data: commentData } = useQuery({
     queryKey: ['community', communityId],
@@ -40,7 +37,6 @@ const CommunityComent = ({ communityId }) => {
         isAsc,
         page,
       ),
-    // staleTime: 60 * 1000,
   });
 
   console.log('commentData', commentData);
@@ -54,6 +50,7 @@ const CommunityComent = ({ communityId }) => {
     console.log(`Comment ${index + 1}:`, comment);
     console.log(comment.nickname);
     console.log(comment.commentContent);
+    console.log(comment.childComments);
   });
 
   return (
@@ -95,6 +92,39 @@ const CommunityComent = ({ communityId }) => {
                 </CommunityLike>
               </CommunityDetailFirstComment>
             </CommunityDetailFirstCommentBox>
+            {/* 대댓글 리스트 렌더링 */}
+            {comment.childComments &&
+              comment.childComments.map(
+                (childComment, childIndex) => (
+                  <CommunityDetailSecondCommentBox
+                    key={childIndex}
+                  >
+                    <CommunityDetailBox>
+                      <UserImage />
+                      <CommumnityDetailHeaderSub>
+                        <UserName>
+                          {childComment.nickname}
+                        </UserName>
+                        <CommunityDetailCnt>
+                          {childComment.date}
+                        </CommunityDetailCnt>
+                      </CommumnityDetailHeaderSub>
+                    </CommunityDetailBox>
+                    <CommunityDetailFirstComment>
+                      <CommunityDetailContent>
+                        {
+                          childComment.commentContent
+                        }
+                      </CommunityDetailContent>
+                      <CommunityLike>
+                        <div>
+                          <GoThumbsup /> 좋아요
+                        </div>
+                      </CommunityLike>
+                    </CommunityDetailFirstComment>
+                  </CommunityDetailSecondCommentBox>
+                ),
+              )}
           </div>
         ))}
       </Container>
