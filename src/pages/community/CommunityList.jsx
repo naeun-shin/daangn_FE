@@ -55,17 +55,17 @@ const CommunityList = () => {
     return Math.round(differenceInDays);
   };
 
-  // data가 변경될 때마다 useEffect가 호출되어 업데이트됩니다.
   const handleGoToDetailClick = (id) => {
     console.log(id);
     navigate(`/communityDetail/${id}`);
   };
+
   return (
     <>
       <Header />
       <Container>
         {contentArray &&
-         contentArray.length > 0 ? (
+        contentArray.length > 0 ? (
           contentArray.map((item) => (
             <CommunityContainer
               key={item.communityId}

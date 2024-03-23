@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -32,6 +33,7 @@ import {
 
 const CommunityUpdate = () => {
   const navigate = useNavigate();
+  const fileInput = useRef();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] =
@@ -96,16 +98,29 @@ const CommunityUpdate = () => {
   const handleContentChange = (e) => {
     setContent(e.target.value);
   };
+
   const handleImageChange = (e) => {
-    console.log(e);
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
-    reader.onload = () => {
-      setSelectedImage(reader.result); // 선택된 파일의 URL을 상태에 저장
-    };
-    reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
-    // Set image preview
-    setImagePreview(URL.createObjectURL(file));
+    if (file == null || file == undefined) {
+      reader.onload = () => {
+        setSelectedImage(selectedImage);
+        setImagePreview(reader.result); // 이미지 미리보기를 설정
+      };
+      reader.readAsDataURL(selectedImage); // 파일을 읽어서 데이터 URL로 변환
+    } else {
+      reader.onload = () => {
+        setSelectedImage(file); // 선택된 파일을 상태에 저장
+        setImagePreview(reader.result); // 이미지 미리보기를 설정
+      };
+      reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
+    }
+  };
+
+  const handleImageDelete = () => {
+    console.log('handleImageDelete');
+    setSelectedImage([]); //
+    setImagePreview([]); //
   };
 
   const communityUpdateMutation = useMutation({
@@ -132,8 +147,16 @@ const CommunityUpdate = () => {
   };
 
   const handleGoBackClick = () => {
-    navigate(-1);
+    navigate(`/communityDetail/${communityId}`);
   };
+
+  if (isLoading) {
+    return <div>is Loding...</div>;
+  } else if (isError) {
+    return (
+      <div> Error occured during fetching...</div>
+    );
+  }
   return (
     <>
       {/* 헤더 영영 */}
@@ -195,12 +218,21 @@ const CommunityUpdate = () => {
             {data.communityImageList ? (
               data.communityImageList.map(
                 (image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    style={{ width: '25px' }}
-                    alt={`Image ${index}`}
-                  />
+                  <>
+                    <img
+                      key={index}
+                      src={image.url}
+                      style={{ width: '25px' }}
+                      alt={`Image ${index}`}
+                    />
+                    <button
+                      onClick={() =>
+                        handleImageDelete(index)
+                      }
+                    >
+                      X
+                    </button>
+                  </>
                 ),
               )
             ) : (
@@ -210,7 +242,6 @@ const CommunityUpdate = () => {
                 alt="selected"
               />
             )}
-            <button>X</button>
           </div>
         </CommunityWriteBox>
         <LightBreak />
@@ -220,6 +251,7 @@ const CommunityUpdate = () => {
             // style={{ display: "none" }}
             onChange={handleImageChange}
             // value={selectedImage}
+            ref={fileInput}
           />
           <AiOutlinePicture /> &nbsp;
           <p>사진</p>

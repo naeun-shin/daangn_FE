@@ -1,4 +1,5 @@
 import { instance } from './axios';
+import Community from '../pages/Community';
 
 export const getCommunityList = async (
   isAsc,
@@ -139,5 +140,30 @@ export const updateCommunity = async (data) => {
     console.log(response);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getCommunityComment = async (
+  communityId,
+  isAsc,
+  page,
+) => {
+  console.log(
+    'detailList : ',
+    parseInt(communityId),
+  );
+  try {
+    const response = await instance.get(
+      `/community/${communityId}/comments`,
+      {
+        params: { isAsc, page },
+      },
+    );
+    console.log('댓글 조회 ', response);
+    return response;
+  } catch (error) {
+    throw new Error(
+      'failed to fetch community data',
+    );
   }
 };

@@ -56,7 +56,7 @@ const CommunityCreate = () => {
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
     reader.onload = () => {
-      setSelectedImage(reader.result); // 선택된 파일의 URL을 상태에 저장
+      setSelectedImage(file); // 선택된 파일의 URL을 상태에 저장
     };
     reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
   };
