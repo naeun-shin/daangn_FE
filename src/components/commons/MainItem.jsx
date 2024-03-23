@@ -2,20 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
-const MainItem = () => {
+const MainItem = ({
+  title,
+  detail,
+  price,
+  imageUrl,
+}) => {
   return (
     <ItemContainer>
       <ItemBox>
-        <ImageBox>
-          <div>image</div>
-        </ImageBox>
+        <ImageBox
+          style={{
+            backgroundImage: `url(${imageUrl})`,
+          }}
+        />
         <ContentBox>
-          <Title>샤넬 뷰티 복조리 파우치</Title>
-          <Detail>호계1동 . 끌올 12분 전</Detail>
-          <Price>35,000원</Price>
+          <Title>{title}</Title>
+          <Detail>{detail}</Detail>
+          <Price>{price}원</Price>
         </ContentBox>
         <IconContainer>
-          <IoMdHeartEmpty size='20' />
+          <IoMdHeartEmpty size="20" />
         </IconContainer>
       </ItemBox>
     </ItemContainer>
@@ -43,6 +50,7 @@ const ImageBox = styled.div`
   width: 140px;
   height: 140px;
   margin-right: 10px;
+  background-size: cover;
 `;
 
 const ContentBox = styled.div`

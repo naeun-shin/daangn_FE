@@ -1,10 +1,18 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
   headers: {
-    "content-type": "application/json;charset=UTF-8",
-    accept: "application/json,",
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhQGEuY29tIiwiYXV0aCI6IlVTRVIiLCJleHAiOjE3MTQ2MTAyNjYsImlhdCI6MTcxMTAxMDI2Nn0.Q4FOzdFRSHLKX-md0dzbWPPB24oPc8_V_L35sxccObM`,
+    'content-type':
+      'application/json;charset=UTF-8',
+    accept: 'application/json,',
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTAzMDcwNzQyNyIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0ODAxMjYwLCJpYXQiOjE3MTEyMDEyNjB9.24ES2yT3AnAra_FM4sd6-mZIqmpO5qFeld2GN9tHCww`,
+  },
+});
+
+export const instance2 = axios.create({
+  baseURL: process.env.REACT_APP_SERVER_URL,
+  headers: {
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTAzMDcwNzQyNyIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0ODAxMjYwLCJpYXQiOjE3MTEyMDEyNjB9.24ES2yT3AnAra_FM4sd6-mZIqmpO5qFeld2GN9tHCww`,
   },
 });

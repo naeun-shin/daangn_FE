@@ -4,10 +4,9 @@ import { FaCamera } from 'react-icons/fa';
 
 const ImageUploader = ({ image, setImage }) => {
   const handleImageChange = (e) => {
-    setImage(
-      URL.createObjectURL(e.target.files[0]),
-    );
-  };
+    const file = e.target.files[0];
+    setImage(file);
+  }; // 수정했음
 
   return (
     <ImageUploadContainer>
@@ -22,10 +21,12 @@ const ImageUploader = ({ image, setImage }) => {
         </ImageInputLabel>
       )}
       {image && (
-        <UploadedImage
-          src={image}
-          alt="업로드된 이미지"
-        />
+        <ImageBox>
+          <UploadedImage
+            src={URL.createObjectURL(image)}
+            alt="업로드된 이미지"
+          />
+        </ImageBox>
       )}
     </ImageUploadContainer>
   );
@@ -51,6 +52,13 @@ const ImageInputLabel = styled.label`
 
 const ImageInput = styled.input`
   display: none;
+`;
+
+const ImageBox = styled.div`
+  border: 1px solid #000;
+  border-radius: 10px;
+  width: 140px;
+  height: 140px;
 `;
 
 const UploadedImage = styled.img`
