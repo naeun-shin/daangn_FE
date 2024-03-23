@@ -9,10 +9,9 @@ const Home = () => {
       <Header />
       <Maincategory />
       <MainItem />
-      <WritingButton />
+      <WritingButton isCommunity={false} />
     </>
   );
 };
-
 
 export default Home;

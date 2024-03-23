@@ -171,7 +171,7 @@ const CommunityDetail = () => {
           </CommunityDetailTitle>
           <CommunityDetailContent>
             <div>{detailList.contents}</div>
-            { }
+            {}
 
             {detailList.communityImageList.map(
               (image, index) => (

@@ -216,7 +216,7 @@ const CommunityUpdate = () => {
             type="file"
             // style={{ display: "none" }}
             onChange={handleImageChange}
-          // value={selectedImage}
+            // value={selectedImage}
           />
           <AiOutlinePicture /> &nbsp;
           <p>사진</p>
@@ -228,5 +228,4 @@ const CommunityUpdate = () => {
     </>
   );
 };
-
 export default CommunityUpdate;

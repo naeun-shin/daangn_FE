@@ -1,26 +1,41 @@
-import { instance } from "./axios";
+import { instance } from './axios';
 
-export const getCommunityList = async (isAsc, page) => {
-  console.log(isAsc, page);
+export const getCommunityList = async (
+  isAsc,
+  page,
+) => {
   try {
-    const response = await instance.get("/community", {
-      params: { isAsc, page },
-    });
+    const response = await instance.get(
+      '/community',
+      {
+        params: { isAsc, page },
+      },
+    );
     return response.data;
   } catch (error) {
-    throw new Error("failed to fetch community data");
+    throw new Error(
+      'failed to fetch community data',
+    );
   }
 };
 
-export const createCommunity = async (communityValue) => {
+export const createCommunity = async (
+  communityValue,
+) => {
   console.log(communityValue);
   try {
-    const { category, title, content, selectedImage, address } = communityValue;
+    const {
+      category,
+      title,
+      content,
+      selectedImage,
+      address,
+    } = communityValue;
     const formData = new FormData();
-    formData.append("files", selectedImage); // 이미지를 FormData에 추가
+    formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
     formData.append(
-      "CommunityRequestDto",
+      'CommunityRequestDto',
       JSON.stringify({
         category,
         title,
