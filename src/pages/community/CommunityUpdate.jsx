@@ -33,7 +33,7 @@ import {
 const CommunityUpdate = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [contents, setContents] = useState('');
+  const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] =
     useState('');
   const [selectedImage, setSelectedImage] =
@@ -69,11 +69,12 @@ const CommunityUpdate = () => {
   });
 
   useEffect(() => {
+    console.log(data.contents);
     if (data) {
       setTitle(data.title);
-      setContents(data.contents);
+      setContent(data.content);
       setSelectedImage(data.communityImageList);
-      setAddress(data.address);
+      // setAddress(data.address);
       setSelectedOption(data.category);
       setCommunityId(data.communityId);
     }
@@ -82,7 +83,7 @@ const CommunityUpdate = () => {
   const newCommunityValue = {
     category: selectedOption,
     title,
-    contents,
+    content,
     selectedImage,
     address,
     communityId,
@@ -93,7 +94,7 @@ const CommunityUpdate = () => {
   };
 
   const handleContentChange = (e) => {
-    setContents(e.target.value);
+    setContent(e.target.value);
   };
   const handleImageChange = (e) => {
     console.log(e);
@@ -108,6 +109,7 @@ const CommunityUpdate = () => {
   };
 
   const communityUpdateMutation = useMutation({
+    mutationKey: ['community'],
     mutationFn: updateCommunity,
     onSuccess: (response) => {
       console.log(response);
@@ -126,6 +128,7 @@ const CommunityUpdate = () => {
     communityUpdateMutation.mutate(
       newCommunityValue,
     );
+    handleGoBackClick();
   };
 
   const handleGoBackClick = () => {
@@ -186,7 +189,7 @@ const CommunityUpdate = () => {
           <CommunityWriteContent
             placeholder="동네 근처 이웃과 동네에서의 소소한 일상, 정보를 공유해보세요."
             onChange={handleContentChange}
-            value={contents}
+            value={content}
           />
           <div>
             {data.communityImageList ? (

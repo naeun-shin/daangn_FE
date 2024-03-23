@@ -50,8 +50,9 @@ const CommunityCreate = () => {
   const handleContentChange = (e) => {
     setContent(e.target.value);
   };
+
   const handleImageChange = (e) => {
-    console.log(e);
+    console.log(e.target.files);
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
     reader.onload = () => {
@@ -61,7 +62,7 @@ const CommunityCreate = () => {
   };
 
   const handleImageRemove = () => {
-    setSelectedImage(null);
+    setSelectedImage('');
   };
 
   const communityValue = {
@@ -76,6 +77,7 @@ const CommunityCreate = () => {
     mutationFn: createCommunity,
     onSuccess: (response) => {
       console.log(response);
+      navigate('/community');
     },
     onError: (error) => {
       console.log(error);
@@ -84,7 +86,10 @@ const CommunityCreate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(communityValue);
+    console.log(
+      'submit button value > ',
+      communityValue,
+    );
     communityCreateMutation.mutate(
       communityValue,
     );

@@ -65,7 +65,8 @@ const CommunityDetail = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['community', communityId],
-    queryFn: () => getCommunityDetail(communityId),
+    queryFn: () =>
+      getCommunityDetail(communityId),
   });
 
   const detailList = data;
@@ -118,7 +119,7 @@ const CommunityDetail = () => {
   // 삭제 버튼
   const handleDeleteClick = () => {
     // console.log(id);
-    // deleteCommunityContent.mutate(id);
+    deleteCommunityContent.mutate(communityId);
   };
 
   const handleUpdateClick = () => {
@@ -170,7 +171,7 @@ const CommunityDetail = () => {
             {detailList.title}
           </CommunityDetailTitle>
           <CommunityDetailContent>
-            <div>{detailList.contents}</div>
+            <div>{detailList.content}</div>
             {}
 
             {detailList.communityImageList.map(
@@ -316,9 +317,7 @@ const CommunityDetail = () => {
               삭제되고 다시 볼 수 없어요.
             </div>
             <CancelButton
-              onClick={() =>
-                setIsDeleteOpen(false)
-              }
+              onClick={handleCancelClick}
             >
               취소
             </CancelButton>

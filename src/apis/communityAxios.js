@@ -31,6 +31,12 @@ export const createCommunity = async (
       selectedImage,
       address,
     } = communityValue;
+
+    console.log(
+      'selectedImage > ',
+      selectedImage,
+    );
+
     const formData = new FormData();
     formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
@@ -44,6 +50,12 @@ export const createCommunity = async (
       }),
     );
 
+    console.log(
+      formData.get('CommunityRequestDto'),
+    );
+
+    console.log(formData.get('files'));
+
     // FormData에는 이미지와 JSON 데이터가 함께 포함되어 있음
     const response = await instance.post(
       '/community',
@@ -54,6 +66,7 @@ export const createCommunity = async (
         },
       },
     );
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -87,7 +100,7 @@ export const deleteCommunity = async (id) => {
 };
 
 export const updateCommunity = async (data) => {
-  console.log(data.communityId);
+  console.log(data);
   const {
     category,
     title,
@@ -95,6 +108,8 @@ export const updateCommunity = async (data) => {
     selectedImage,
     address,
   } = data;
+
+  console.log('selectedImage >> ', selectedImage);
   const formData = new FormData();
   formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
@@ -107,7 +122,10 @@ export const updateCommunity = async (data) => {
       address,
     }),
   );
-
+  console.log(
+    formData.get('UpdateCommunityRequestDto'),
+  );
+  console.log('files > ', formData.get('files'));
   try {
     const response = await instance.post(
       `/community/${data.communityId}`,
