@@ -29,7 +29,6 @@ const SellPage = () => {
       queryClient.invalidateQueries([
         'tradePosts',
       ]);
-      console.log('image:::', image);
       navigate('/home');
     } catch (error) {
       console.error(

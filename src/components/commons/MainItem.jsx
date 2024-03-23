@@ -1,15 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const MainItem = ({
   title,
   detail,
   price,
   imageUrl,
+  id,
 }) => {
+  const navigate = useNavigate();
+
+  // 상세 페이지로 이동하는 함수
+  const navigateDetailPage = () => {
+    navigate(`/detail/${id}`, {
+      state: { title, detail, price, imageUrl },
+    });
+  };
+
   return (
-    <ItemContainer>
+    <ItemContainer onClick={navigateDetailPage}>
       <ItemBox>
         <ImageBox
           style={{

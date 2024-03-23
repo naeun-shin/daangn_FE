@@ -14,6 +14,7 @@ import Community from '../pages/Community';
 import CommunityCreate from '../pages/community/CommunityCreate';
 import CommunityDetail from '../pages/community/CommunityDetail';
 import SellPage from '../pages/Sellpage';
+import DetailPage from '../pages/SellDetailPage';
 
 const Router = () => {
   return (
@@ -48,6 +49,10 @@ const Router = () => {
         <Route
           path="/Sellpage"
           element={<SellPage />}
+        />
+        <Route
+          path="/detail/:id"
+          element={<DetailPage />}
         />
       </Routes>
       {/* <Footer /> */}
