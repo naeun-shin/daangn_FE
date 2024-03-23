@@ -29,7 +29,6 @@ const CommunityList = () => {
     queryKey: ['community', isAsc, page],
     queryFn: () => getCommunityList(isAsc, page),
   });
-
   console.log(data);
   useEffect(() => {
     if (data) {
@@ -66,7 +65,7 @@ const CommunityList = () => {
       <Header />
       <Container>
         {contentArray &&
-        contentArray.length > 0 ? (
+         contentArray.length > 0 ? (
           contentArray.map((item) => (
             <CommunityContainer
               key={item.communityId}

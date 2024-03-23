@@ -231,5 +231,4 @@ const CommunityUpdate = () => {
     </>
   );
 };
-
 export default CommunityUpdate;

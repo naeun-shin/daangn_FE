@@ -38,6 +38,17 @@ const Button = ({ isCommunity }) => {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = showModal
+      ? 'hidden'
+      : 'auto';
+
+    // 컴포넌트 언마운트 / 모달 닫힐 때 스크롤 되도록 설정!
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showModal]);
+
   const handleClick = () => {
     setIsClicked(!isClicked);
     setShowModal(!showModal);
