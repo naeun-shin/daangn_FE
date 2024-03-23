@@ -167,3 +167,23 @@ export const getCommunityComment = async (
     );
   }
 };
+
+export const createCommunityComment = async (
+  communityId,
+  { parentCommentId, commentContent },
+) => {
+  console.log(
+    'axios',
+    parentCommentId,
+    commentContent,
+  );
+  try {
+    const response = await instance.post(
+      `community/${communityId}/comment`,
+      { parentCommentId, commentContent },
+    );
+    console.log('response >> ', response);
+  } catch (error) {
+    console.log(error);
+  }
+};

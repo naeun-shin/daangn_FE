@@ -24,6 +24,7 @@ import { BiMap } from 'react-icons/bi';
 import { HiPaperAirplane } from 'react-icons/hi2';
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityComment } from '../../apis/communityAxios';
+import CommunityCommentCreate from './CommunityCommentCreate';
 
 const CommunityComent = ({ communityId }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -39,19 +40,15 @@ const CommunityComent = ({ communityId }) => {
       ),
   });
 
-  console.log('commentData', commentData);
-
   const commentList = commentData.data.content;
 
-  console.log('commentList', commentList);
-
-  commentList.map((comment, index) => {
-    // 각 comment를 출력하거나 원하는 방식으로 표시
-    console.log(`Comment ${index + 1}:`, comment);
-    console.log(comment.nickname);
-    console.log(comment.commentContent);
-    console.log(comment.childComments);
-  });
+  // commentList.map((comment, index) => {
+  //   // 각 comment를 출력하거나 원하는 방식으로 표시
+  //   console.log(`Comment ${index + 1}:`, comment);
+  //   console.log(comment.nickname);
+  //   console.log(comment.commentContent);
+  //   console.log(comment.childComments);
+  // });
 
   return (
     <div>
@@ -128,25 +125,10 @@ const CommunityComent = ({ communityId }) => {
           </div>
         ))}
       </Container>
-
       <Break />
-
-      <Container>
-        <Footer>
-          <FooterLeft>
-            <AiOutlinePicture
-              size={22}
-              color="gray"
-            />
-            &nbsp; &nbsp;
-            <BiMap size={22} color="gray" />
-          </FooterLeft>
-          <input placeholder="댓글을 입력해주세요." />
-          <div>
-            <HiPaperAirplane color="gray" />
-          </div>
-        </Footer>
-      </Container>
+      <CommunityCommentCreate
+        communityId={communityId}
+      />
     </div>
   );
 };
