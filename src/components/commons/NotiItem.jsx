@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import logoImage from '../../images/logoImage.png';
+import logoImage from '../../images/logo.png';
 
-const NotiItem = ({ title, timeAgo, contents }) => (
+const NotiItem = ({
+  title,
+  timeAgo,
+  contents,
+}) => (
   <NotiContainer>
     <NotiBox>
       <LogoBox>
-        <img src={logoImage} alt='Logo' />
+        <img src={logoImage} alt="Logo" />
       </LogoBox>
       <NotiContentBox>
         <Title>{title}</Title>

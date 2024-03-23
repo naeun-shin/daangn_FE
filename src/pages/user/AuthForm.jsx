@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import AddressModal from './AddressModal';
 import { Cookies } from 'react-cookie';
+import { IoIosArrowBack } from "react-icons/io";
 
 const AuthForm = () => {
   const nav = useNavigate();
@@ -22,10 +23,10 @@ const AuthForm = () => {
 
   const [user, setUser] = useState({
     phoneNumber: '',
-    nickname: '곰',
-    address: '서울시',
-    email: '111@111.com',
-    password: 'Abc1234!!!',
+    nickname: '',
+    address: '',
+    email: '',
+    password: 'abc1234',
   })
 
   //주소 받기
@@ -35,9 +36,6 @@ const AuthForm = () => {
       ...user,
       address,
     })
-
-    localStorage.setItem('address', address);
-
     setShowAddressModal(false);
   }
 
@@ -104,7 +102,7 @@ const AuthForm = () => {
   const sendPhoneNumberMutation = useMutation({
     mutationFn: sendPhoneNumber,
     onSuccess: (data) => {
-      const match = data.data.match(/\((\d+)\)/);
+      const match = data.match(/\((\d+)\)/);
       if (match) {
         const code = match[1];
         console.log('인증번호:', code);
@@ -125,7 +123,7 @@ const AuthForm = () => {
   const sendPhoneNumberMutation2 = useMutation({
     mutationFn: sendPhoneNumber2,
     onSuccess: (data) => {
-      const match = data.data.match(/\((\d+)\)/);
+      const match = data.match(/\((\d+)\)/);
       if (match) {
         const code = match[1];
         console.log('인증번호:', code);
@@ -166,7 +164,7 @@ const AuthForm = () => {
   const checkPhoneNumberMutation = useMutation({
     mutationFn: checkPhoneNumber,
     onSuccess: async (data) => {
-      if (data.data) {
+      if (data) {
         if (!isLogin) {
           setShowVerificationModal(true);
         }
@@ -197,7 +195,7 @@ const AuthForm = () => {
   const checkPhoneNumberMutation2 = useMutation({
     mutationFn: checkPhoneNumber2,
     onSuccess: async (data) => {
-      cookie.set("token", data.data.authorization);
+      cookie.set("token", data.authorization);
       nav('/home');
     },
     onError: () => {
@@ -224,7 +222,7 @@ const AuthForm = () => {
     return axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
       headers: {
         'accept': '*/*',
-        // 'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     })
       .then(response => response.data);
@@ -271,7 +269,7 @@ const AuthForm = () => {
   return (
     <div>
       {!isLogin && <AddressModal isOpen={showAddressModal} onClose={() => setShowAddressModal(false)} onSubmit={handleSubmitAddressModal} />}
-      <div style={{ fontSize: '30px', marginBottom: '50px', cursor: 'pointer' }} onClick={() => { nav(-1) }}>&lt;</div>
+      <div style={{ fontSize: '30px', margin: '20px 0 50px', cursor: 'pointer' }} onClick={() => { nav(-1) }}><IoIosArrowBack /></div>
       <div style={{ marginLeft: '15px' }}>
         <HelloSpan>안녕하세요!</HelloSpan><br />
         {isLogin ? (
