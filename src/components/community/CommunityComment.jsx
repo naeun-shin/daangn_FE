@@ -30,38 +30,39 @@ const CommunityComent = ({ communityId }) => {
   const [isAsc, setIsAsc] = useState(true);
   const [page, setPage] = useState(1);
 
-  // console.log(communityId);
+  console.log(communityId);
 
-  // const { data, isLoading, isError } = useQuery({
-  //   queryKey: ['community', communityId],
-  //   queryFn: () =>
-  //     getCommunityComment(
-  //       communityId,
-  //       isAsc,
-  //       page,
-  //     ),
-  // });
-  // console.log(data);
+  const { data } = useQuery({
+    queryKey: ['community', communityId],
+    queryFn: () =>
+      getCommunityComment(
+        communityId,
+        isAsc,
+        page,
+      ),
+  });
+  console.log(data);
 
-  // const commentList = data.content;
+  // data가 undefined인 경우를 처리하기 위해 추가
+  const commentList = data?.data?.content || [];
 
-  // // commentList.map((comment, index) => {
-  // //   // 각 comment를 출력하거나 원하는 방식으로 표시
-  // //   console.log(`Comment ${index + 1}:`, comment);
-  // //   console.log(comment.nickname);
-  // //   console.log(comment.commentContent);
-  // //   console.log(comment.childComments);
-  // // });
+  commentList.map((comment, index) => {
+    // 각 comment를 출력하거나 원하는 방식으로 표시
+    console.log(`Comment ${index + 1}:`, comment);
+    console.log(comment.nickname);
+    console.log(comment.commentContent);
+    console.log(comment.childComments);
+  });
 
   return (
     <div>
-      {/* <Container>
+      <Container>
         <CommunityDetailCommentHeader>
           <div>댓글 {commentList.length}</div>
           <div>등록순 최신순</div>
-        </CommunityDetailCommentHeader> */}
+        </CommunityDetailCommentHeader>
 
-      {/* {commentList.length === 0 ? (
+        {commentList.length === 0 ? (
           <div>댓글이 없습니다.</div>
         ) : (
           commentList.map((comment, index) => (
@@ -92,9 +93,9 @@ const CommunityComent = ({ communityId }) => {
                     </div>
                   </CommunityLike>
                 </CommunityDetailFirstComment>
-              </CommunityDetailFirstCommentBox> */}
-      {/* 대댓글 리스트 렌더링 */}
-      {/* {comment.childComments &&
+              </CommunityDetailFirstCommentBox>{' '}
+              {/* 대댓글 리스트 렌더링 */}
+              {comment.childComments &&
                 comment.childComments.map(
                   (childComment, childIndex) => (
                     <CommunityDetailSecondCommentBox
@@ -130,12 +131,12 @@ const CommunityComent = ({ communityId }) => {
                 )}
             </div>
           ))
-        )} */}
-      {/* </Container>
+        )}
+      </Container>
       <Break />
       <CommunityCommentCreate
         communityId={communityId}
-      /> */}
+      />
     </div>
   );
 };
