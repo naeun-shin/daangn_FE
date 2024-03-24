@@ -27,6 +27,7 @@ import {
   ModalDeleteContent,
   DeleteButton,
   CancelButton,
+  ModalButtons,
 } from '../CommunityStyles';
 import {
   useNavigate,
@@ -264,16 +265,18 @@ const CommunityDetail = () => {
               게시글을 삭제하면 모든 데이터가
               삭제되고 다시 볼 수 없어요.
             </div>
-            <CancelButton
-              onClick={handleCancelClick}
-            >
-              취소
-            </CancelButton>
-            <DeleteButton
-              onClick={handleDeleteClick}
-            >
-              삭제
-            </DeleteButton>
+            <ModalButtons>
+              <CancelButton
+                onClick={handleCancelClick}
+              >
+                취소
+              </CancelButton>
+              <DeleteButton
+                onClick={handleDeleteClick}
+              >
+                삭제
+              </DeleteButton>
+            </ModalButtons>
           </ModalDeleteContent>
         </ModalDeleteContainer>
       )}

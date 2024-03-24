@@ -169,18 +169,19 @@ export const getCommunityComment = async (
 };
 
 export const createCommunityComment = async (
-  communityId,
-  { parentCommentId, commentContent },
+  newCommentValue,
 ) => {
-  console.log(
-    'axios',
-    parentCommentId,
+  console.log('commentValue > ', newCommentValue);
+  const {
     commentContent,
-  );
+    communityId,
+    parentCommentId,
+  } = newCommentValue.newCommentValue;
+
   try {
     const response = await instance.post(
       `community/${communityId}/comment`,
-      { parentCommentId, commentContent },
+      { commentContent, parentCommentId },
     );
     console.log('response >> ', response);
   } catch (error) {

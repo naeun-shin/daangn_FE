@@ -8,6 +8,8 @@ import {
   CommunityWriteBox,
   CommunityWriteCategory,
   CommunityCateogyList,
+  CommunityWriteCategoryTitle,
+  CategoryList,
 } from '../CommunityStyles';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiMap } from 'react-icons/bi';
@@ -124,30 +126,29 @@ const CommunityCreate = () => {
         {/* body */}
         <CommunityWriteBox>
           <CommunityWriteCategory>
-            <div
+            <CommunityWriteCategoryTitle
               onClick={() =>
                 setShowOptions(!showOptions)
               }
             >
-              {selectedOption}
-            </div>
+              {!selectedOption ? (
+                <p> 카테고리를 선택하세요</p>
+              ) : (
+                <p>{selectedOption}</p>
+              )}
+            </CommunityWriteCategoryTitle>
             {showOptions && (
-              <CommunityCateogyList
-                style={{
-                  position: 'absolute',
-                  backgroundColor: 'white',
-                }}
-              >
+              <CommunityCateogyList>
                 {communityCategory.map(
                   (option, index) => (
-                    <div
+                    <CategoryList
                       key={index}
                       onClick={() =>
                         handleOptionSelect(option)
                       }
                     >
                       {option}
-                    </div>
+                    </CategoryList>
                   ),
                 )}
               </CommunityCateogyList>

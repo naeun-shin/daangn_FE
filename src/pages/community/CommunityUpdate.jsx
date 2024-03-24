@@ -43,6 +43,7 @@ const CommunityUpdate = () => {
   const [address, setAddress] = useState(
     '서울시 서초구 반포동',
   );
+  const fileInputRef = useRef(null);
   const [showOptions, setShowOptions] =
     useState(false);
   const [communityId, setCommunityId] =
@@ -59,7 +60,6 @@ const CommunityUpdate = () => {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    console.log(option);
     setShowOptions(false);
   };
 
@@ -99,12 +99,19 @@ const CommunityUpdate = () => {
     setContent(e.target.value);
   };
 
+  const handleUploadImageClick = () => {
+    fileInputRef.current.click();
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
     if (file == null || file == undefined) {
       reader.onload = () => {
-        setSelectedImage(selectedImage);
+        setSelectedImage([
+          ...selectedImage,
+          reader.result,
+        ]);
         setImagePreview(reader.result); // 이미지 미리보기를 설정
       };
       reader.readAsDataURL(selectedImage); // 파일을 읽어서 데이터 URL로 변환
@@ -117,10 +124,10 @@ const CommunityUpdate = () => {
     }
   };
 
-  const handleImageDelete = () => {
-    console.log('handleImageDelete');
-    setSelectedImage([]); //
-    setImagePreview([]); //
+  const handleImageDelete = (index) => {
+    const updatedImages = [...selectedImage];
+    updatedImages.splice(index, 1);
+    setSelectedImage(updatedImages);
   };
 
   const communityUpdateMutation = useMutation({
@@ -214,24 +221,44 @@ const CommunityUpdate = () => {
             onChange={handleContentChange}
             value={content}
           />
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100px',
+              alignItems: 'flex-end',
+            }}
+          >
             {data.communityImageList ? (
               data.communityImageList.map(
                 (image, index) => (
                   <>
-                    <img
-                      key={index}
-                      src={image.url}
-                      style={{ width: '25px' }}
-                      alt={`Image ${index}`}
-                    />
                     <button
+                      style={{
+                        borderRadius: '50%',
+                        backgroundColor: 'black',
+                        color: 'white',
+                        width: '25px',
+                        height: '25px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        border: 'none',
+                        zIndex: '1',
+                      }}
                       onClick={() =>
                         handleImageDelete(index)
                       }
                     >
                       X
                     </button>
+                    <img
+                      key={index}
+                      src={image.url}
+                      style={{ width: '25px' }}
+                      alt={`Image ${index}`}
+                    />
                   </>
                 ),
               )
@@ -246,14 +273,16 @@ const CommunityUpdate = () => {
         </CommunityWriteBox>
         <LightBreak />
         <CommunityWriteFooter>
+          <AiOutlinePicture
+            onClick={handleUploadImageClick}
+          />{' '}
+          &nbsp;
           <input
             type="file"
-            // style={{ display: "none" }}
+            style={{ display: 'none' }}
             onChange={handleImageChange}
-            // value={selectedImage}
-            ref={fileInput}
+            ref={fileInputRef}
           />
-          <AiOutlinePicture /> &nbsp;
           <p>사진</p>
           <button>
             <BiMap /> &nbsp; <p>장소</p>

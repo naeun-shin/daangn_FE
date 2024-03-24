@@ -6,6 +6,7 @@ import {
   CommunityDetailFirstComment,
   CommunityDetailSecondCommentBox,
   CommunityLike,
+  CommunityDetailRecomment,
   Footer,
   FooterLeft,
 } from '../../pages/CommunityStyles';
@@ -41,25 +42,15 @@ const CommunityComent = ({ communityId }) => {
         page,
       ),
   });
-  console.log(data);
-
   // data가 undefined인 경우를 처리하기 위해 추가
   const commentList = data?.data?.content || [];
-
-  commentList.map((comment, index) => {
-    // 각 comment를 출력하거나 원하는 방식으로 표시
-    console.log(`Comment ${index + 1}:`, comment);
-    console.log(comment.nickname);
-    console.log(comment.commentContent);
-    console.log(comment.childComments);
-  });
 
   return (
     <div>
       <Container>
         <CommunityDetailCommentHeader>
           <div>댓글 {commentList.length}</div>
-          <div>등록순 최신순</div>
+          <div>등록순 &nbsp; 최신순</div>
         </CommunityDetailCommentHeader>
 
         {commentList.length === 0 ? (
@@ -87,13 +78,15 @@ const CommunityComent = ({ communityId }) => {
                     <div>
                       <GoThumbsup /> 좋아요
                     </div>
-                    &nbsp;
-                    <div>
-                      답글 {comment.replyCount}
-                    </div>
                   </CommunityLike>
                 </CommunityDetailFirstComment>
-              </CommunityDetailFirstCommentBox>{' '}
+              </CommunityDetailFirstCommentBox>
+              <CommunityDetailRecomment>
+                <CommunityCommentCreate
+                  communityId={communityId}
+                  commentId
+                />
+              </CommunityDetailRecomment>
               {/* 대댓글 리스트 렌더링 */}
               {comment.childComments &&
                 comment.childComments.map(
