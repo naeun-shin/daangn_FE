@@ -14,7 +14,7 @@ import axios from 'axios';
 const SellPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // 판매글 작성을 위한 데이터를 서버로 전송하는 함수
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,6 +37,7 @@ const SellPage = () => {
       );
     }
   };
+
   // 제목, 가격
   const [title, setTitle] = useState('');
   const onTitleChange = (e) => {
