@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import styled from 'styled-components';
+import * as s from './UserStyles';
 import { TbViewfinder } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from "react-icons/io";
@@ -107,10 +107,10 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
         }
       }}
     >
-      <ModalContent>
+      <s.ModalContent>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center', margin: '20px auto' }}>
           <div style={{ fontSize: '30px', cursor: 'pointer', marginRight: '20px', alignItems: 'center' }} onClick={() => { nav(-1) }}><IoIosArrowBack /></div>
-          <StyledInput
+          <s.StyledInput
             type="text"
             placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
             value={address}
@@ -118,15 +118,15 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
           />
         </div>
         {results.length > 0 && (
-          <SearchResults>
+          <s.SearchResults>
             {results.map((result, index) => (
-              <ResultItem key={index} onClick={() => handleResultClick(result.address_name)}>
+              <s.ResultItem key={index} onClick={() => handleResultClick(result.address_name)}>
                 {result.address_name}
-              </ResultItem>
+              </s.ResultItem>
             ))}
-          </SearchResults>
+          </s.SearchResults>
         )}
-        <CurrentLocationButton active='true' onClick={getCurrentLocation}><TbViewfinder />&nbsp;현재 위치로 찾기</CurrentLocationButton>
+        <s.CurrentLocationButton active='true' onClick={getCurrentLocation}><TbViewfinder />&nbsp;현재 위치로 찾기</s.CurrentLocationButton>
         <div style={{ textAlign: 'left', marginLeft: '18px' }}>
           <p>근처 동네</p>
           <p>서울특별시 구로구 개봉동</p>
@@ -137,73 +137,10 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
           <p>경기도 광명시 광명2동</p>
         </div>
 
-        <SubmitButton onClick={handleSubmit}>다음</SubmitButton>
-      </ModalContent>
+        <s.SubmitButton onClick={handleSubmit}>다음</s.SubmitButton>
+      </s.ModalContent>
     </Modal>
   );
 };
 
 export default AddressModal;
-
-const ModalContent = styled.div`
-  text-align: center;
-`;
-
-const StyledInput = styled.input`
-  height: 40px;
-  width: 80%;
-  border-radius: 5px;
-`;
-
-const SubmitButton = styled.button`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #FF6F0F;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-`;
-
-const CurrentLocationButton = styled.button`
-  display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 92%;
-    height: 50px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    color: ${(props) => (props.active === 'true' ? 'white' : 'lightgray')};
-    background-color: ${(props) => (props.active === 'true' ? '#FF6F0F' : 'white')};
-    cursor: ${(props) => (props.active === 'true' ? 'pointer' : 'default')};
-    font-size: 20px;
-    font-weight: 500;
-    margin: 0 auto 15px;
-    font-size: 20px;
-    pointer-events: ${(props) => (props.active === 'true' ? 'auto' : 'none')};
-`;
-
-const SearchResults = styled.div`
-  position: absolute;
-  top: 65px;
-  left: 60px;
-  width: 81%;
-  overflow-y: auto;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  background-color: white;
-  z-index: 999;
-`;
-
-const ResultItem = styled.div`
-  padding: 8px;
-  cursor: pointer;
-  text-align: left;
-  font-size: 15px;
-  &:hover {
-    background-color: lightgray;
-  }
-`;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import styled from 'styled-components';
+import * as s from './UserStyles';
 import basicImg from '../../images/basicImg.png';
 import { ImCamera } from "react-icons/im";
 
@@ -15,9 +15,18 @@ const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
     setProfileImage(file);
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = () => {
-    console.log('Nickname:', nickname);
-    console.log('Profile image:', profileImage);
+    if (!validateEmail(email)) {
+      alert('올바른 이메일 주소를 입력해주세요.');
+      return;
+    }
+
+    onClose();
     onSubmit({ nickname, email, profileImage });
   };
 
@@ -51,114 +60,38 @@ const ProfileModal = ({ isOpen, onClose, onSubmit }) => {
         }
       }}
     >
-      <ModalContent>
+      <s.ModalContent>
         <p>프로필 설정</p>
-        <ProfileImageContainer>
-          <ProfileImage src={profileImage ? URL.createObjectURL(profileImage) : basicImg} alt="Profile" />
-          <ProfileImageLabel htmlFor="profileImage">
-            <ProfileImageIcon><ImCamera /></ProfileImageIcon>
-          </ProfileImageLabel>
-          <ProfileImageInput
+        <s.ProfileImageContainer>
+          <s.ProfileImage src={profileImage ? URL.createObjectURL(profileImage) : basicImg} alt="Profile" />
+          <s.ProfileImageLabel htmlFor="profileImage">
+            <s.ProfileImageIcon><ImCamera /></s.ProfileImageIcon>
+          </s.ProfileImageLabel>
+          <s.ProfileImageInput
             type="file"
             id="profileImage"
             accept="image/*"
             onChange={handleFileChange}
           />
-        </ProfileImageContainer>
-        <StyledInput
+        </s.ProfileImageContainer>
+        <s.StyledInput2
           type="text"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
-        <StyledInput
+        <s.StyledInput2
           type="email"
           placeholder="이메일을 입력해주세요."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={{ marginTop: '20px' }} />
         <p>프로필 사진과 닉네임, 이메일을 입력해주세요.</p>
-        <SubmitButton onClick={handleSubmit}>다음</SubmitButton>
-      </ModalContent>
+        <s.SubmitButton onClick={handleSubmit}>다음</s.SubmitButton>
+      </s.ModalContent>
     </Modal>
   );
 };
 
 export default ProfileModal;
 
-const ModalContent = styled.div`
-  text-align: center;
-`;
-
-const ProfileImageContainer = styled.div`
-  position: relative;
-  margin-bottom: 20px;
-`;
-
-const ProfileImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-`;
-
-const ProfileImageLabel = styled.label`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const ProfileImageInput = styled.input`
-  display: none;
-`;
-
-const ProfileImageIcon = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  bottom: 5px; 
-  right: 10px;
-  width: 30px;
-  height: 30px;
-  background-color: white;
-  opacity: 50%;
-  border-radius: 50%;
-  padding-bottom: 5px;
-`;
-
-const StyledInput = styled.input`
-  margin-bottom: 20px;
-  height: 50px;
-  width: 92%;
-  border-radius: 5px;
-`;
-
-const SubmitButton = styled.button`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #FF6F0F;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-  text-align: left;
-  margin: 0 18px;
-`;
