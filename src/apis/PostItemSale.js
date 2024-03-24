@@ -114,12 +114,14 @@ export const deleteTradePost = async (
     const response = await instance.delete(
       `/trades/${tradeId}`,
     );
-    console.log(response.data);
+    console.log('response:', response);
+    return response;
   } catch (error) {
     console.error(
       'Error deleting trade post:',
       error,
     );
+    return error.response || error;
   }
 };
 

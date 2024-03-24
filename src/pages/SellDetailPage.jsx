@@ -1,12 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { deleteTradePost } from '../apis/PostItemSale';
 
 const DetailPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const { title, detail, price, imageUrl } =
+  const { title, detail, price, imageUrl, id } =
     location.state || {};
+
+  const handleDelete = async () => {
+    const result = await deleteTradePost(id);
+    console.log('결과:', result);
+    if (result.status === 200) {
+      console.log('삭제 성공');
+      navigate('/home');
+    } else {
+      console.error('삭제 실패', result.data);
+    }
+  };
 
   return (
     <PageContainer>
@@ -21,6 +37,9 @@ const DetailPage = () => {
         <Detail>{detail}</Detail>
         <Price>{price}원</Price>
         <DetailButton>상세보기</DetailButton>
+        <DeleteButton onClick={handleDelete}>
+          삭제하기
+        </DeleteButton>
       </InfoContainer>
     </PageContainer>
   );
@@ -82,4 +101,16 @@ const DetailButton = styled.button`
   font-size: 18px;
   cursor: pointer;
   margin-top: 16px;
+`;
+
+const DeleteButton = styled.button`
+  padding: 10px 16px;
+  background-color: #4d4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 16px;
+  margin-left: 8px;
 `;
