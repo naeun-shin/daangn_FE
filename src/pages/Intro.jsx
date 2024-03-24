@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import logoImage from '../images/logoImage.png'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
+import { Cookies } from 'react-cookie';
 
 const Main = () => {
   const nav = useNavigate();
+  const cookie = new Cookies();
+
+  useEffect(() => {
+    const token = cookie.get('accessToken');
+    console.log('token', token);
+    if (token) {
+      nav('/home');
+    }
+  }, []);
 
 
   const handleStartClick = () => {
