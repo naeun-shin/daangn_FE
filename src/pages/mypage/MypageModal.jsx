@@ -12,17 +12,21 @@ const MypageModal = ({ isOpen, onClose, onSubmit, currentUser }) => {
   const [modalEditing, setModalEditing] = useState(false);
   const [user, setUser] = useState(currentUser);
   const [editType, setEditType] = useState('');
+  const [editedNickname, setEditedNickname] = useState(user.nickname);
 
   useEffect(() => {
     setUser(currentUser);
-    console.log('modal user', user);
   }, [currentUser]);
 
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log('Selected file:', file);
+    console.log('체인지 file', file);
     setProfileImage(file);
+    setUser({
+      ...user,
+      url: URL.createObjectURL(file)
+    })
   };
 
   const handleEdit = () => {
@@ -30,16 +34,20 @@ const MypageModal = ({ isOpen, onClose, onSubmit, currentUser }) => {
   };
 
   const handleSave = () => {
+    setUser(prevUser => ({
+      ...prevUser,
+      nickname: editedNickname
+    }));
     setIsEditing(false);
   };
 
   const handleSubmitEditModal = (updatedUser) => {
     console.log('update: ', updatedUser)
+    console.log('update 이미지: ', profileImage)
     setUser({
       ...user,
       ...updatedUser
     });
-    setProfileImage(profileImage);
     setModalEditing(false);
   }
 
@@ -50,6 +58,12 @@ const MypageModal = ({ isOpen, onClose, onSubmit, currentUser }) => {
     onClose();
   };
 
+  const handleGoBack = () => {
+    setUser(currentUser);
+    setEditedNickname('');
+    setIsEditing(false)
+    onClose();
+  }
 
 
   return (
@@ -82,15 +96,15 @@ const MypageModal = ({ isOpen, onClose, onSubmit, currentUser }) => {
     >
       <s.ModalContent>
         <div style={{ display: 'flex', alignItems: 'center', margin: '20px auto' }}>
-          <span style={{ fontSize: '30px', cursor: 'pointer' }} onClick={onClose}><IoIosArrowBack /></span>
+          <span style={{ fontSize: '30px', cursor: 'pointer' }} onClick={handleGoBack}><IoIosArrowBack /></span>
           <p style={{ width: '314px', textAlign: 'center' }}>프로필 / 계정 관리</p>
         </div>
         <div>
           <s.TitleP2>프로필 정보</s.TitleP2>
           <div>
             <s.ProfileInfo>
-              <s.ProfileImageContainer>
-                <s.ProfileImage2 src={profileImage ? URL.createObjectURL(profileImage) : basicImg} alt="Profile" />
+              <s.ProfileImageContainer style={{ height: '100px', width: '100px' }}>
+                <s.ProfileImage2 src={profileImage ? URL.createObjectURL(profileImage) : user.url || basicImg} alt="Profile" />
                 <s.ProfileImageLabel htmlFor="profileImage">
                   <s.ProfileImageIcon><ImCamera /></s.ProfileImageIcon>
                 </s.ProfileImageLabel>
@@ -104,7 +118,11 @@ const MypageModal = ({ isOpen, onClose, onSubmit, currentUser }) => {
               <div>
                 {isEditing ? (
                   <s.InputContainer>
-                    <s.NickInput value={user.nickname} onChange={(e) => setUser(prevUser => ({ ...prevUser, nickname: e.target.value }))} disabled={!isEditing} />
+                    <s.NickInput
+                      value={editedNickname}
+                      onChange={(e) => setEditedNickname(e.target.value)}
+                      disabled={!isEditing}
+                    />
                     <span onClick={handleSave}>저장</span>
                   </s.InputContainer>
                 ) : (

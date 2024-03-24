@@ -46,3 +46,18 @@ export const getInfo = async () => {
     throw new Error(error.response.data.message);
   }
 };
+
+
+export const updateInfo = async (formData) => {
+  try {
+    const response = await instanceWithToken.post(`user/update`, formData, {
+      headers: {
+        'accept': '*/*',
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};

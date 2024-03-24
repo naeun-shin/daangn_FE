@@ -8,8 +8,10 @@ const MypageEditModal = ({ isOpen, onClose, onSubmit, user, editType }) => {
   const [editedPhoneNumber, setEditedPhoneNumber] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [inputCode, setInputCode] = useState('');
-  const [isCodeValid, setIsCodeValid] = useState(false);
-  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
+  const [isButtonActive, setIsButtonActive] = useState(true);
+  const [isButtonActive2, setIsButtonActive2] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -24,19 +26,29 @@ const MypageEditModal = ({ isOpen, onClose, onSubmit, user, editType }) => {
       setEditedPhoneNumber('');
       setVerificationCode('');
       setInputCode('');
-      setIsCodeValid(false);
-      setIsCodeSent(false);
+      setVerificationMessage('');
     }
   }, [isOpen]);
 
 
   const handleCloseModal = () => {
-    if (editType === 'email') {
-      onSubmit({ [editType]: editedEmail });
+    if (inputCode === '') {
+      onClose();
     } else {
-      onSubmit({ [editType]: editedPhoneNumber });
+      if (isCodeVerified) {
+        if (editType === 'email') {
+          onSubmit({ [editType]: editedEmail });
+        } else {
+          onSubmit({ [editType]: editedPhoneNumber });
+        }
+        setIsButtonActive(true);
+        onClose();
+      } else {
+        alert('인증되지 않았습니다.')
+      }
     }
-    onClose();
+
+
   };
 
 
@@ -44,25 +56,31 @@ const MypageEditModal = ({ isOpen, onClose, onSubmit, user, editType }) => {
     const generatedCode = Math.floor(100000 + Math.random() * 900000);
     console.log('인증번호:', generatedCode);
     setVerificationCode(generatedCode.toString());
-    setIsCodeSent(true);
+    setIsButtonActive(false);
+    setIsButtonActive2(true);
+    setVerificationMessage('');
   };
 
   const handleVerifyCode = () => {
     if (inputCode === verificationCode) {
-      setIsCodeValid(true);
+      setIsCodeVerified(true);
+      setVerificationMessage('인증번호가 일치합니다.');
+      setIsButtonActive2(false)
     } else {
-      setIsCodeValid(false);
+      setIsCodeVerified(false);
+      setVerificationMessage('인증번호가 일치하지 않습니다.');
     }
   };
 
   const handleInputChange = (e) => {
+    setIsButtonActive2(true);
     setInputCode(e.target.value);
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onClose}
+      onRequestClose={handleCloseModal}
       style={{
         overlay: {
           position: 'fixed',
@@ -94,12 +112,11 @@ const MypageEditModal = ({ isOpen, onClose, onSubmit, user, editType }) => {
             value={editType === 'email' ? editedEmail : editedPhoneNumber}
             onChange={editType === 'email' ? (e) => setEditedEmail(e.target.value) : (e) => setEditedPhoneNumber(e.target.value)}
           />
-          <s.StyledBtn style={{ margin: '5px 0' }} onClick={handleGenerateVerificationCode} disabled={isCodeSent}>인증번호 받기</s.StyledBtn>
+          <s.StyledBtn active={isButtonActive.toString()} style={{ margin: '5px 0' }} onClick={handleGenerateVerificationCode}>인증번호 받기</s.StyledBtn>
         </s.FlexDiv2>
         <s.StyledInput placeholder='인증번호 6자리 입력' value={inputCode} onChange={handleInputChange} />
-        <s.StyledBtn style={{ margin: '5px 0' }} onClick={handleVerifyCode} disabled={!isCodeSent}>인증번호 확인</s.StyledBtn>
-        {isCodeValid && <p style={{ textAlign: 'center' }}>수정 가능합니다!</p>}
-        {!isCodeValid && <p style={{ textAlign: 'center' }}>인증번호가 일치하지 않습니다.</p>}
+        <s.StyledBtn active={isButtonActive2.toString()} style={{ margin: '5px 0' }} onClick={handleVerifyCode}>인증번호 확인</s.StyledBtn>
+        {verificationMessage && <p style={{ textAlign: 'center' }}>{verificationMessage}</p>}
         <s.SubmitButton onClick={handleCloseModal}>저장</s.SubmitButton>
       </s.ModalContent>
     </Modal>

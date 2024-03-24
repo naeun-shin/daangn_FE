@@ -123,36 +123,29 @@ const AuthForm = () => {
   };
 
 
-  //회원가입
-  const mutation = useMutation(signUp);
-
+  // 회원가입 API 호출
+  const mutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: async () => {
+      nav('/')
+    }
+  });
   const handleSubmitProfileModal = async ({ nickname, password, email, profileImage }) => {
-    setUser({
-      ...user,
-      nickname,
-      password,
-      email,
-    });
+    setUser({ ...user, nickname, password, email });
     setShowVerificationModal(false);
 
-    //회원가입 API호출 및 데이터 전송
     const formData = new FormData();
     formData.append('signupRequestDto', JSON.stringify({
       email,
-      password: user.password,
+      password: 'Abc1234!!',
       nickname,
       phoneNumber: user.phoneNumber,
       address: user.address,
     }));
-    formData.append('files', profileImage)
+    formData.append('files', profileImage);
 
-    try {
-      const response = await signUp(formData);
-      nav('/');
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+    mutation.mutate(formData)
+  }
 
 
 

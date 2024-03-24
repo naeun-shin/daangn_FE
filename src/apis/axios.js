@@ -12,7 +12,6 @@ export const instance = axios.create({
 });
 
 
-
 // 헤더가 필요 없는 인스턴스
 export const instanceWithoutHeaders = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,

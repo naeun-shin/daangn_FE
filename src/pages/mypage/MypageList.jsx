@@ -3,7 +3,6 @@ import { IoSettingsOutline } from "react-icons/io5";
 import basicImg from '../../images/basicImg.png';
 import { IoIosArrowForward } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
-import { ReactComponent as Wonsign } from '../../images/wonsign.svg';
 import * as s from './MypageStyles';
 import carrotPay from '../../images/carrotPay.jpg'
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -12,36 +11,46 @@ import { TbReceipt } from "react-icons/tb";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { PiNotebook } from "react-icons/pi";
 import MypageModal from './MypageModal';
-import { getInfo } from '../../apis/userAxios';
+import { getInfo, updateInfo } from '../../apis/userAxios';
+import { useMutation } from '@tanstack/react-query';
+import { FaWonSign } from "react-icons/fa6";
 
 
 const MypageList = () => {
-  const profileImage = '';
+  const [profileImg, setProfileImg] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState([])
-
+  const [user, setUser] = useState({})
 
   //유저정보 가져오기
-
+  const getUserInfo = async () => {
+    try {
+      const data = await getInfo();
+      setUser(data);
+      setProfileImg(data.url);
+      console.log('data: ', data)
+      console.log('처음user', user);
+      console.log('처음profileImg', profileImg)
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const data = await getInfo();
-        setUser(data);
-        console.log('user', user);
-      } catch (error) {
-        alert(error.message);
-      }
-    };
     getUserInfo();
-  }, [])
+  }, []);
 
+  const mutation = useMutation({ mutationFn: updateInfo });
 
-  const handleSubmitModal = (updatedUser) => {
+  const handleSubmitModal = async (updatedUser, updatedProfileImage) => {
     setUser(updatedUser);
-    setIsOpen(false)
-  }
+    setProfileImg(updatedProfileImage);
+    setIsOpen(false);
+    const formData = new FormData();
+    formData.append('userRequestDto', JSON.stringify(updatedUser));
+    formData.append('files', updatedProfileImage);
+    mutation.mutate(formData);
+    console.log('모달profileImg', profileImg)
+  };
 
 
   return (
@@ -50,7 +59,7 @@ const MypageList = () => {
         <div style={{ display: 'bolck', fontSize: '25px', textAlign: 'right', marginTop: '50px' }}><IoSettingsOutline /></div>
         <s.ProfileBar>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <s.ProfileImage src={profileImage ? profileImage : basicImg} alt="Profile" />
+            <s.ProfileImage src={user.url || basicImg} alt="Profile" />
             <p style={{ fontWeight: '700', marginLeft: '10px', fontSize: '20px' }}>{user.nickname}</p>
           </div>
           <s.PayButton style={{ width: '100px' }} onClick={() => setIsOpen(true)}>프로필 수정</s.PayButton>
@@ -62,7 +71,7 @@ const MypageList = () => {
           </s.PayBar>
           <s.ButtonBar>
             <s.PayButton><s.FlexDiv><FiPlus />&nbsp;충전</s.FlexDiv></s.PayButton>
-            <s.PayButton><s.FlexDiv><Wonsign style={{ width: '15px', height: '15px' }} />&nbsp;계좌송금</s.FlexDiv></s.PayButton>
+            <s.PayButton><s.FlexDiv><FaWonSign />&nbsp;계좌송금</s.FlexDiv></s.PayButton>
           </s.ButtonBar>
         </s.PayDiv>
         <s.SectionBox>

@@ -69,6 +69,10 @@ const PayButton = styled.button`
   width: 45%;
   height: 35px;
   cursor: pointer;
+  background-color: #FF6F0F;
+  color: white;
+  border-radius: 5px;
+  border: none;
 `
 
 const SectionBox = styled.div`
@@ -205,10 +209,14 @@ const StyledBtn = styled.button`
   height: 35px;
   border-radius: 5px;
   background-color: #FF6F0F;
-  color: white;
-  border: none;
   padding: 10px 20px;
-  cursor: pointer;
+  border: 1px solid lightgray;
+  color: ${(props) => (props.active === 'true' ? 'white' : 'lightgray')};
+  background-color: ${(props) => (props.active === 'true' ? '#FF6F0F' : 'white')};
+  cursor: ${(props) => (props.active === 'true' ? 'pointer' : 'default')};
+  font-weight: 500;
+  margin: 15px auto;
+  pointer-events: ${(props) => (props.active === 'true' ? 'auto' : 'none')};
 `
 
 const StyledTitle = styled.p`
