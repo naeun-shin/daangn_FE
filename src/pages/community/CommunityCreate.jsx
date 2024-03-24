@@ -23,9 +23,14 @@ const CommunityCreate = () => {
   const [content, setContent] = useState('');
   const [selectedImage, setSelectedImage] =
     useState('');
+  const [
+    showSelectedImage,
+    setShowSelectedImage,
+  ] = useState('');
   const [address, setAddress] = useState(
     '서울시 서초구 반포동',
   );
+  const fileInputRef = useRef(null);
   const [showOptions, setShowOptions] =
     useState(false);
   const communityCategory = [
@@ -39,7 +44,6 @@ const CommunityCreate = () => {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    console.log(option);
     setShowOptions(false);
   };
 
@@ -51,11 +55,15 @@ const CommunityCreate = () => {
     setContent(e.target.value);
   };
 
+  const handleUploadImageClick = () => {
+    fileInputRef.current.click();
+  };
   const handleImageChange = (e) => {
     console.log(e.target.files);
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
     reader.onload = () => {
+      console.log(file);
       setSelectedImage(file); // 선택된 파일의 URL을 상태에 저장
     };
     reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
@@ -72,7 +80,7 @@ const CommunityCreate = () => {
     selectedImage,
     address,
   };
-
+  console.log('selectedImage : ', selectedImage);
   const communityCreateMutation = useMutation({
     mutationFn: createCommunity,
     onSuccess: (response) => {
@@ -155,25 +163,64 @@ const CommunityCreate = () => {
             onChange={handleContentChange}
             value={content}
           ></CommunityWriteContent>
-          <div>
-            <img
-              src={selectedImage}
-              style={{ width: '25px' }}
-            />
-            <button onClick={handleImageRemove}>
-              X
-            </button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100px',
+              alignItems: 'flex-end',
+            }}
+          >
+            {selectedImage && (
+              <>
+                <button
+                  style={{
+                    // top: '5px',
+                    // right: '5px',
+                    borderRadius: '50%',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    width: '25px',
+                    height: '25px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    border: 'none',
+                    zIndex: '1', // 사진 위에 보이도록 z-index 설정
+                  }}
+                  onClick={handleImageRemove}
+                  name="X"
+                >
+                  X
+                </button>
+                <img
+                  src={URL.createObjectURL(
+                    selectedImage,
+                  )}
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '5px',
+                  }}
+                  alt="Selected Image"
+                />
+              </>
+            )}
           </div>
         </CommunityWriteBox>
         <LightBreak />
         <CommunityWriteFooter>
+          <AiOutlinePicture
+            onClick={handleUploadImageClick}
+          />{' '}
+          &nbsp;
           <input
             type="file"
-            // style={{ display: "none" }}
+            style={{ display: 'none' }}
             onChange={handleImageChange}
-            // value={selectedImage}
+            ref={fileInputRef}
           />
-          <AiOutlinePicture /> &nbsp;
           <p>사진</p>
           <button>
             <BiMap /> &nbsp; <p>장소</p>
