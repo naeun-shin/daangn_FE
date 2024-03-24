@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -32,8 +33,9 @@ import {
 
 const CommunityUpdate = () => {
   const navigate = useNavigate();
+  const fileInput = useRef();
   const [title, setTitle] = useState('');
-  const [contents, setContents] = useState('');
+  const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] =
     useState('');
   const [selectedImage, setSelectedImage] =
@@ -41,6 +43,7 @@ const CommunityUpdate = () => {
   const [address, setAddress] = useState(
     '서울시 서초구 반포동',
   );
+  const fileInputRef = useRef(null);
   const [showOptions, setShowOptions] =
     useState(false);
   const [communityId, setCommunityId] =
@@ -57,7 +60,6 @@ const CommunityUpdate = () => {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    console.log(option);
     setShowOptions(false);
   };
 
@@ -69,11 +71,12 @@ const CommunityUpdate = () => {
   });
 
   useEffect(() => {
+    console.log(data.contents);
     if (data) {
       setTitle(data.title);
-      setContents(data.contents);
+      setContent(data.content);
       setSelectedImage(data.communityImageList);
-      setAddress(data.address);
+      // setAddress(data.address);
       setSelectedOption(data.category);
       setCommunityId(data.communityId);
     }
@@ -82,7 +85,7 @@ const CommunityUpdate = () => {
   const newCommunityValue = {
     category: selectedOption,
     title,
-    contents,
+    content,
     selectedImage,
     address,
     communityId,
@@ -93,21 +96,42 @@ const CommunityUpdate = () => {
   };
 
   const handleContentChange = (e) => {
-    setContents(e.target.value);
+    setContent(e.target.value);
   };
+
+  const handleUploadImageClick = () => {
+    fileInputRef.current.click();
+  };
+
   const handleImageChange = (e) => {
-    console.log(e);
     const file = e.target.files[0]; // 첫 번째 파일만 선택하도록 함
     const reader = new FileReader();
-    reader.onload = () => {
-      setSelectedImage(reader.result); // 선택된 파일의 URL을 상태에 저장
-    };
-    reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
-    // Set image preview
-    setImagePreview(URL.createObjectURL(file));
+    if (file == null || file == undefined) {
+      reader.onload = () => {
+        setSelectedImage([
+          ...selectedImage,
+          reader.result,
+        ]);
+        setImagePreview(reader.result); // 이미지 미리보기를 설정
+      };
+      reader.readAsDataURL(selectedImage); // 파일을 읽어서 데이터 URL로 변환
+    } else {
+      reader.onload = () => {
+        setSelectedImage(file); // 선택된 파일을 상태에 저장
+        setImagePreview(reader.result); // 이미지 미리보기를 설정
+      };
+      reader.readAsDataURL(file); // 파일을 읽어서 데이터 URL로 변환
+    }
+  };
+
+  const handleImageDelete = (index) => {
+    const updatedImages = [...selectedImage];
+    updatedImages.splice(index, 1);
+    setSelectedImage(updatedImages);
   };
 
   const communityUpdateMutation = useMutation({
+    mutationKey: ['community'],
     mutationFn: updateCommunity,
     onSuccess: (response) => {
       console.log(response);
@@ -126,11 +150,20 @@ const CommunityUpdate = () => {
     communityUpdateMutation.mutate(
       newCommunityValue,
     );
+    handleGoBackClick();
   };
 
   const handleGoBackClick = () => {
-    navigate(-1);
+    navigate(`/communityDetail/${communityId}`);
   };
+
+  if (isLoading) {
+    return <div>is Loding...</div>;
+  } else if (isError) {
+    return (
+      <div> Error occured during fetching...</div>
+    );
+  }
   return (
     <>
       {/* 헤더 영영 */}
@@ -186,18 +219,47 @@ const CommunityUpdate = () => {
           <CommunityWriteContent
             placeholder="동네 근처 이웃과 동네에서의 소소한 일상, 정보를 공유해보세요."
             onChange={handleContentChange}
-            value={contents}
+            value={content}
           />
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100px',
+              alignItems: 'flex-end',
+            }}
+          >
             {data.communityImageList ? (
               data.communityImageList.map(
                 (image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    style={{ width: '25px' }}
-                    alt={`Image ${index}`}
-                  />
+                  <>
+                    <button
+                      style={{
+                        borderRadius: '50%',
+                        backgroundColor: 'black',
+                        color: 'white',
+                        width: '25px',
+                        height: '25px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        border: 'none',
+                        zIndex: '1',
+                      }}
+                      onClick={() =>
+                        handleImageDelete(index)
+                      }
+                    >
+                      X
+                    </button>
+                    <img
+                      key={index}
+                      src={image.url}
+                      style={{ width: '25px' }}
+                      alt={`Image ${index}`}
+                    />
+                  </>
                 ),
               )
             ) : (
@@ -207,18 +269,20 @@ const CommunityUpdate = () => {
                 alt="selected"
               />
             )}
-            <button>X</button>
           </div>
         </CommunityWriteBox>
         <LightBreak />
         <CommunityWriteFooter>
+          <AiOutlinePicture
+            onClick={handleUploadImageClick}
+          />{' '}
+          &nbsp;
           <input
             type="file"
-            // style={{ display: "none" }}
+            style={{ display: 'none' }}
             onChange={handleImageChange}
-          // value={selectedImage}
+            ref={fileInputRef}
           />
-          <AiOutlinePicture /> &nbsp;
           <p>사진</p>
           <button>
             <BiMap /> &nbsp; <p>장소</p>
@@ -228,5 +292,4 @@ const CommunityUpdate = () => {
     </>
   );
 };
-
 export default CommunityUpdate;

@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import bear from '../images/bear.png';
-import TEST1 from '../images/TEST1.jpg';
 
 const Header = styled.div`
-  height: 100px;
+  height: 70px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  /* border: 1px solid black; */
-  /* padding-bottom: 5px; */
   font-weight: bold;
   button {
     background-color: transparent;
@@ -29,7 +26,7 @@ const CommunityWrapper = styled.div`
 
 const Container = styled.div`
   padding: 10px;
-  /* border: 1px solid black; */
+  margin-bottom: 50px;
 `;
 
 const CommunityContainer = styled.div`
@@ -171,9 +168,32 @@ const CommunityDetailSecondCommentBox = styled.div`
 `;
 
 const CommunityWriteBox = styled.div``;
-const CommunityWriteCategory = styled.div``;
-
-const CommunityCateogyList = styled.div``;
+const CommunityWriteCategory = styled.div`
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+const CommunityWriteCategoryTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid lightgray;
+`;
+const CommunityCateogyList = styled.div`
+  position: absolute;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  align-items: center;
+`;
+const CategoryList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+  padding: 5px 0px;
+`;
 const CommunityWriteTitle = styled.input`
   width: 97%;
   height: 5vh;
@@ -220,6 +240,10 @@ const CommunityWriteFooter = styled.div`
   }
 `;
 
+const CommunityDetailRecomment = styled.div`
+  padding-left: 15%;
+`;
+
 const Footer = styled.div`
   display: flex;
   align-items: center;
@@ -231,7 +255,7 @@ const Footer = styled.div`
     border-style: none;
     background-color: #d3d3d359;
     padding: 10px 7px;
-    width: 70%;
+    width: 80%;
   }
 `;
 
@@ -243,7 +267,7 @@ const ModalContainer = styled.div`
       : '-100%'}; // 모달이 열리면 아래에서 위로 올라오게 설정
   left: 0;
   width: 100%;
-  height: 20%; // 모달 높이 설정
+  /* height: 20%; // 모달 높이 설정 */
   background-color: white;
   transition: bottom 1s ease; // 모달 열림/닫힘 애니메이션 효과
   z-index: 999; // 다른 요소 위에 나타나도록 설정
@@ -284,17 +308,32 @@ const ModalDeleteContainer = styled.div`
 
 // 모달 내용 스타일
 const ModalDeleteContent = styled.div`
-  background-color: white; /* 하얀 배경 */
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 // 모달 삭제 버튼 스타일
 const DeleteButton = styled.button`
-  /* 여기에 버튼 스타일을 추가하세요 */
+  border: 1px solid lightgray;
+  width: 100px;
+  background-color: #ff6f0f;
+  padding: 20px;
+  border-radius: 10px;
 `;
 // 모달 삭제 취소 버튼 스타일
-const CancelButton = styled.button``;
+const CancelButton = styled.button`
+  border: 1px solid lightgray;
+  width: 100px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+const ModalButtons = styled.div``;
 
 const FooterLeft = styled.div`
   margin-left: 5px;
@@ -350,4 +389,8 @@ export {
   ModalDeleteContent,
   DeleteButton,
   CancelButton,
+  CommunityDetailRecomment,
+  CommunityWriteCategoryTitle,
+  CategoryList,
+  ModalButtons,
 };

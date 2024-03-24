@@ -27,6 +27,7 @@ import {
   ModalDeleteContent,
   DeleteButton,
   CancelButton,
+  ModalButtons,
 } from '../CommunityStyles';
 import {
   useNavigate,
@@ -47,12 +48,15 @@ import {
 } from '@tanstack/react-query';
 import {
   deleteCommunity,
+  getCommunityComment,
   getCommunityDetail,
 } from '../../apis/communityAxios';
 import { CiMenuKebab } from 'react-icons/ci';
 import { PiExport } from 'react-icons/pi';
 import { GoBellFill } from 'react-icons/go';
 import { MdArrowBackIos } from 'react-icons/md';
+import CommunityComment from '../../components/community/CommunityComment';
+import useCommunityCommentQuery from '../../utils/useQueryUtil';
 
 const CommunityDetail = () => {
   const navigate = useNavigate();
@@ -60,15 +64,39 @@ const CommunityDetail = () => {
   const [isDeleteOpen, setIsDeleteOpen] =
     useState(false);
 
+  // const [isAsc, setIsAsc] = useState(true);
+  // const [page, setPage] = useState(1);
   const param = useParams();
   const communityId = param.id;
+  console.log(communityId);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['community', communityId],
-    queryFn: () => getCommunityDetail(communityId),
+    queryFn: () =>
+      getCommunityDetail(communityId),
+    staleTime: 60 * 1000,
   });
 
+  console.log(data);
   const detailList = data;
+  // console.log(detailList);
+  // 댓글 데이터 가져오는 custom hook 사용
+
+  // const { data: commentData } = useQuery({
+  //   queryKey: [
+  //     'community',
+  //     detailList.communityId,
+  //   ],
+  //   queryFn: () =>
+  //     getCommunityComment(
+  //       detailList.communityId,
+  //       isAsc,
+  //       page,
+  //     ),
+  //   staleTime: 60 * 1000,
+  // });
+
+  // console.log('commentData', commentData);
 
   const deleteCommunityContent = useMutation({
     mutationFn: deleteCommunity,
@@ -98,7 +126,7 @@ const CommunityDetail = () => {
   };
 
   const handleGoBackClick = () => {
-    navigate(-1);
+    navigate('/community');
   };
   // 모달 토글 함수
   const handleModalBottomClick = () => {
@@ -118,13 +146,14 @@ const CommunityDetail = () => {
   // 삭제 버튼
   const handleDeleteClick = () => {
     // console.log(id);
-    // deleteCommunityContent.mutate(id);
+    deleteCommunityContent.mutate(communityId);
   };
 
   const handleUpdateClick = () => {
     console.log(communityId);
     navigate(`/communityUpdate/${communityId}`);
   };
+
   if (isLoading) {
     return <div>is Loding...</div>;
   } else if (isError) {
@@ -170,9 +199,7 @@ const CommunityDetail = () => {
             {detailList.title}
           </CommunityDetailTitle>
           <CommunityDetailContent>
-            <div>{detailList.contents}</div>
-            { }
-
+            <div>{detailList.content}</div>
             {detailList.communityImageList.map(
               (image, index) => (
                 <div key={index}>
@@ -201,86 +228,9 @@ const CommunityDetail = () => {
         </div>
       </Container>
       <Break />
-      <Container>
-        <CommunityDetailCommentHeader>
-          <div>댓글 2</div>
-          <div>등록순 최신순</div>
-        </CommunityDetailCommentHeader>
-
-        <CommunityDetailFirstCommentBox>
-          <CommunityDetailBox>
-            <UserImage />
-            <CommumnityDetailHeaderSub>
-              <UserName>유저이름</UserName>
-              <CommunityDetailCnt>
-                동네 이름 • 날짜
-              </CommunityDetailCnt>
-            </CommumnityDetailHeaderSub>
-          </CommunityDetailBox>
-          <CommunityDetailFirstComment>
-            <CommunityDetailContent>
-              Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore
-              et dolore magna aliqua. Ut enim ad
-              minim veniam, quis nostrud
-              exercitation ullamco laboris
-            </CommunityDetailContent>
-            <CommunityLike>
-              <div>
-                <GoThumbsup /> 좋아요
-              </div>
-              &nbsp;
-              <div>답글 1</div>
-            </CommunityLike>
-          </CommunityDetailFirstComment>
-
-          <CommunityDetailSecondCommentBox>
-            <CommunityDetailBox>
-              <UserImage />
-              <CommumnityDetailHeaderSub>
-                <UserName>유저이름</UserName>
-                <CommunityDetailCnt>
-                  인증 횟수 • 날짜
-                </CommunityDetailCnt>
-              </CommumnityDetailHeaderSub>
-            </CommunityDetailBox>
-            <CommunityDetailFirstComment>
-              <CommunityDetailContent>
-                Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed
-                do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris
-              </CommunityDetailContent>
-              <CommunityLike>
-                <div>
-                  <GoThumbsup /> 좋아요
-                </div>
-              </CommunityLike>
-            </CommunityDetailFirstComment>
-          </CommunityDetailSecondCommentBox>
-        </CommunityDetailFirstCommentBox>
-      </Container>
-      <Break />
-
-      <Container>
-        <Footer>
-          <FooterLeft>
-            <AiOutlinePicture
-              size={22}
-              color="gray"
-            />
-            &nbsp; &nbsp;
-            <BiMap size={22} color="gray" />
-          </FooterLeft>
-          <input placeholder="댓글을 입력해주세요."></input>
-          <div>
-            <HiPaperAirplane color="gray" />
-          </div>
-        </Footer>
-      </Container>
+      <CommunityComment
+        communityId={detailList.communityId}
+      />
 
       {/* 모달 */}
       {/* 모달을 클릭하면 아래에서 위로 올라오는 모달 */}
@@ -315,18 +265,18 @@ const CommunityDetail = () => {
               게시글을 삭제하면 모든 데이터가
               삭제되고 다시 볼 수 없어요.
             </div>
-            <CancelButton
-              onClick={() =>
-                setIsDeleteOpen(false)
-              }
-            >
-              취소
-            </CancelButton>
-            <DeleteButton
-              onClick={handleDeleteClick}
-            >
-              삭제
-            </DeleteButton>
+            <ModalButtons>
+              <CancelButton
+                onClick={handleCancelClick}
+              >
+                취소
+              </CancelButton>
+              <DeleteButton
+                onClick={handleDeleteClick}
+              >
+                삭제
+              </DeleteButton>
+            </ModalButtons>
           </ModalDeleteContent>
         </ModalDeleteContainer>
       )}

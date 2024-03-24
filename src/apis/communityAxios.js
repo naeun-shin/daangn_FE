@@ -1,26 +1,48 @@
-import { instance } from "./axios";
+import { instance } from './axios';
+import Community from '../pages/Community';
 
-export const getCommunityList = async (isAsc, page) => {
-  console.log(isAsc, page);
+export const getCommunityList = async (
+  isAsc,
+  page,
+) => {
   try {
-    const response = await instance.get("/community", {
-      params: { isAsc, page },
-    });
+    const response = await instance.get(
+      '/community',
+      {
+        params: { isAsc, page },
+      },
+    );
     return response.data;
   } catch (error) {
-    throw new Error("failed to fetch community data");
+    throw new Error(
+      'failed to fetch community data',
+    );
   }
 };
 
-export const createCommunity = async (communityValue) => {
+export const createCommunity = async (
+  communityValue,
+) => {
   console.log(communityValue);
   try {
-    const { category, title, content, selectedImage, address } = communityValue;
+    const {
+      category,
+      title,
+      content,
+      selectedImage,
+      address,
+    } = communityValue;
+
+    console.log(
+      'selectedImage > ',
+      selectedImage,
+    );
+
     const formData = new FormData();
-    formData.append("files", selectedImage); // 이미지를 FormData에 추가
+    formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
     formData.append(
-      "CommunityRequestDto",
+      'CommunityRequestDto',
       JSON.stringify({
         category,
         title,
@@ -28,6 +50,12 @@ export const createCommunity = async (communityValue) => {
         address,
       }),
     );
+
+    console.log(
+      formData.get('CommunityRequestDto'),
+    );
+
+    console.log(formData.get('files'));
 
     // FormData에는 이미지와 JSON 데이터가 함께 포함되어 있음
     const response = await instance.post(
@@ -39,6 +67,7 @@ export const createCommunity = async (communityValue) => {
         },
       },
     );
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -72,7 +101,7 @@ export const deleteCommunity = async (id) => {
 };
 
 export const updateCommunity = async (data) => {
-  console.log(data.communityId);
+  console.log(data);
   const {
     category,
     title,
@@ -80,6 +109,8 @@ export const updateCommunity = async (data) => {
     selectedImage,
     address,
   } = data;
+
+  console.log('selectedImage >> ', selectedImage);
   const formData = new FormData();
   formData.append('files', selectedImage); // 이미지를 FormData에 추가
 
@@ -92,7 +123,10 @@ export const updateCommunity = async (data) => {
       address,
     }),
   );
-
+  console.log(
+    formData.get('UpdateCommunityRequestDto'),
+  );
+  console.log('files > ', formData.get('files'));
   try {
     const response = await instance.post(
       `/community/${data.communityId}`,
@@ -104,6 +138,52 @@ export const updateCommunity = async (data) => {
       },
     );
     console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCommunityComment = async (
+  communityId,
+  isAsc,
+  page,
+) => {
+  console.log(
+    'detailList : ',
+    parseInt(communityId),
+  );
+  try {
+    const response = await instance.get(
+      `/community/${communityId}/comments`,
+      {
+        params: { isAsc, page },
+      },
+    );
+    console.log('댓글 조회 ', response);
+    return response;
+  } catch (error) {
+    throw new Error(
+      'failed to fetch community data',
+    );
+  }
+};
+
+export const createCommunityComment = async (
+  newCommentValue,
+) => {
+  console.log('commentValue > ', newCommentValue);
+  const {
+    commentContent,
+    communityId,
+    parentCommentId,
+  } = newCommentValue.newCommentValue;
+
+  try {
+    const response = await instance.post(
+      `community/${communityId}/comment`,
+      { commentContent, parentCommentId },
+    );
+    console.log('response >> ', response);
   } catch (error) {
     console.log(error);
   }

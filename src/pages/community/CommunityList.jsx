@@ -17,6 +17,7 @@ import { IoChatbubbleOutline } from 'react-icons/io5';
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityList } from '../../apis/communityAxios';
 import Header from '../../components/layout/Header';
+import Footer from '../../components/layout/Footer';
 
 const CommunityList = () => {
   const navigate = useNavigate();
@@ -29,7 +30,6 @@ const CommunityList = () => {
     queryKey: ['community', isAsc, page],
     queryFn: () => getCommunityList(isAsc, page),
   });
-
   console.log(data);
   useEffect(() => {
     if (data) {
@@ -56,17 +56,17 @@ const CommunityList = () => {
     return Math.round(differenceInDays);
   };
 
-  // data가 변경될 때마다 useEffect가 호출되어 업데이트됩니다.
   const handleGoToDetailClick = (id) => {
     console.log(id);
     navigate(`/communityDetail/${id}`);
   };
+
   return (
     <>
       <Header />
       <Container>
         {contentArray &&
-          contentArray.length > 0 ? (
+        contentArray.length > 0 ? (
           contentArray.map((item) => (
             <CommunityContainer
               key={item.communityId}
