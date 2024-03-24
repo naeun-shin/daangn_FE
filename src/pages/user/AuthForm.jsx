@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import ProfileModal from './ProfileModal';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import AddressModal from './AddressModal';
 import { Cookies } from 'react-cookie';
 import { IoIosArrowBack } from "react-icons/io";
+import { sendPhoneNumber, checkPhoneNumber, signUp } from '../../apis/userAxios';
+import * as s from './UserStyles';
+import { useMutation } from '@tanstack/react-query';
 
 const AuthForm = () => {
   const nav = useNavigate();
@@ -41,17 +41,15 @@ const AuthForm = () => {
 
   const handlePhoneNumberChange = (e) => {
     const input = e.target.value;
-
     if (input.length === 13) {
       setIsButtonActive(true);
     } else {
       setIsButtonActive(false);
     }
-
     if (input.length > 13) {
+      setIsButtonActive(true);
       return;
     }
-
     if (e.nativeEvent.inputType === 'deleteContentBackward' || e.nativeEvent.inputType === 'deleteContentForward') {
       setUser({
         ...user,
@@ -74,162 +72,61 @@ const AuthForm = () => {
   };
 
 
-  //가입 인증번호 발송
-  const sendPhoneNumber = async (phoneNumber) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/send-code-phone`, {
-        phoneNumber: phoneNumber
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error('API 호출이 실패했습니다.');
-    }
-  };
 
-  //로그인 인증번호 발송
-  const sendPhoneNumber2 = async (phoneNumber) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login/send-code-phone`, {
-        phoneNumber: phoneNumber,
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error('API 호출이 실패했습니다.');
-    }
-  };
-
-
-  const sendPhoneNumberMutation = useMutation({
-    mutationFn: sendPhoneNumber,
-    onSuccess: (data) => {
-      const match = data.match(/\((\d+)\)/);
-      if (match) {
-        const code = match[1];
-        console.log('인증번호:', code);
-
-        setVerificationCode(code);
-        setShowVerificationButton(true);
-        setShowVerificationModal(false);
-        setIsButtonActive(false);
-      } else {
-        console.error('인증번호를 찾을 수 없습니다.');
-      }
-    },
-    onError: () => {
-      console.error('API 호출 중 오류 발생');
-    }
-  });
-
-  const sendPhoneNumberMutation2 = useMutation({
-    mutationFn: sendPhoneNumber2,
-    onSuccess: (data) => {
-      const match = data.match(/\((\d+)\)/);
-      if (match) {
-        const code = match[1];
-        console.log('인증번호:', code);
-
-        setVerificationCode(code);
-        setShowVerificationButton(true);
-        setShowVerificationModal(false);
-        setIsButtonActive(false);
-      } else {
-        console.error('인증번호를 찾을 수 없습니다.');
-      }
-    },
-    onError: () => {
-      console.error('API 호출 중 오류 발생');
-    }
-  });
-
-
+  //서버에서 유저로 인증번호 발송
   const handleVerificationButtonClick = async () => {
-    isLogin ? sendPhoneNumberMutation2.mutate(user.phoneNumber) : sendPhoneNumberMutation.mutate(user.phoneNumber);
-  };
-
-
-
-  //인증번호 일치여부 확인(회원가입)
-  const checkPhoneNumber = async ({ phoneNumber, verificationCode }) => {
+    const endpoint = isLogin ? 'user/login/send-code-phone' : 'user/signup/send-code-phone';
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup/check-code-phone`, {
-        phoneNumber,
-        verificationCode,
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error('API 호출이 실패했습니다.');
-    }
-  };
+      const data = await sendPhoneNumber(user.phoneNumber, endpoint);
+      const match = data.match(/\((\d+)\)/);
+      if (match) {
+        const code = match[1];
 
-  const checkPhoneNumberMutation = useMutation({
-    mutationFn: checkPhoneNumber,
-    onSuccess: async (data) => {
-      if (data) {
-        if (!isLogin) {
-          setShowVerificationModal(true);
-        }
+        console.log('인증번호:', code);
+
+        setVerificationCode(code);
+        setShowVerificationButton(true);
+        setShowVerificationModal(false);
+        setIsButtonActive(false);
       } else {
-        console.error('인증번호가 일치하지 않습니다.');
+        console.error('인증번호를 찾을 수 없습니다.');
       }
-    },
-    onError: () => {
-      console.error('API 호출 중 오류 발생');
-    }
-  });
-
-
-
-  //인증번호 일치여부 확인(로그인)
-  const checkPhoneNumber2 = async ({ phoneNumber, verificationCode }) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login/phone`, {
-        phoneNumber,
-        verificationCode,
-      });
-      return response.data;
     } catch (error) {
-      throw new Error('API 호출이 실패했습니다.');
+      alert(error.message);
     }
   };
 
-  const checkPhoneNumberMutation2 = useMutation({
-    mutationFn: checkPhoneNumber2,
-    onSuccess: async (data) => {
-      cookie.set("token", data.authorization);
-      nav('/home');
-    },
-    onError: () => {
-      console.error('API 호출 중 오류 발생');
-    }
-  });
 
+
+  //인증번호 일치여부 확인
   const handleVerificationConfirm = async () => {
     const requestData = {
       phoneNumber: user.phoneNumber,
       verificationCode: inputVerificationCode,
     };
-
-    if (isLogin) {
-      checkPhoneNumberMutation2.mutate(requestData);
-    } else {
-      checkPhoneNumberMutation.mutate(requestData);
+    const endpoint = isLogin ? 'user/login/phone' : 'user/signup/check-code-phone';
+    try {
+      const data = await checkPhoneNumber(requestData, endpoint);
+      if (data) {
+        if (!isLogin) {
+          setShowVerificationModal(true);
+        } else {
+          cookie.set('accessToken', data.authorization);
+          nav('/home');
+        }
+      } else {
+        console.error('인증번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류 발생');
     }
   };
 
 
   //회원가입
-  const mutation = useMutation((formData) => {
-    return axios.post(`${process.env.REACT_APP_SERVER_URL}/user/signup`, formData, {
-      headers: {
-        'accept': '*/*',
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(response => response.data);
-  });
+  const mutation = useMutation(signUp);
 
-  const handleSubmitProfileModal = ({ nickname, password, email, profileImage }) => {
-    console.log('nick: ', nickname);
+  const handleSubmitProfileModal = async ({ nickname, password, email, profileImage }) => {
     setUser({
       ...user,
       nickname,
@@ -238,30 +135,23 @@ const AuthForm = () => {
     });
     setShowVerificationModal(false);
 
+    //회원가입 API호출 및 데이터 전송
     const formData = new FormData();
     formData.append('signupRequestDto', JSON.stringify({
       email,
-      password,
+      password: user.password,
       nickname,
       phoneNumber: user.phoneNumber,
       address: user.address,
     }));
     formData.append('files', profileImage)
 
-    mutation.mutate(formData, {
-      onSuccess: data => {
-        console.log('서버 응답:', data);
-        for (let key of formData.keys()) {
-          console.log('key: ', key);
-        }
-        for (let value of formData.values()) {
-          console.log('value: ', value);
-        }
-      },
-      onError: error => {
-        console.error('에러 발생:', error);
-      },
-    });
+    try {
+      const response = await signUp(formData);
+      nav('/');
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
 
@@ -271,34 +161,34 @@ const AuthForm = () => {
       {!isLogin && <AddressModal isOpen={showAddressModal} onClose={() => setShowAddressModal(false)} onSubmit={handleSubmitAddressModal} />}
       <div style={{ fontSize: '30px', margin: '20px 0 50px', cursor: 'pointer' }} onClick={() => { nav(-1) }}><IoIosArrowBack /></div>
       <div style={{ marginLeft: '15px' }}>
-        <HelloSpan>안녕하세요!</HelloSpan><br />
+        <s.HelloSpan>안녕하세요!</s.HelloSpan><br />
         {isLogin ? (
-          <HelloSpan>휴대폰 번호로 로그인해주세요.</HelloSpan>
+          <s.HelloSpan>휴대폰 번호로 로그인해주세요.</s.HelloSpan>
         ) : (
-          <HelloSpan>휴대폰 번호로 가입해주세요.</HelloSpan>
+          <s.HelloSpan>휴대폰 번호로 가입해주세요.</s.HelloSpan>
         )}
         <p style={{ fontSize: '14px', marginBottom: '25px' }}>휴대폰 번호는 안전하게 보관되며 이웃들에게 공개되지 않아요.</p>
       </div>
       <div>
-        <TelInput type='text' placeholder='휴대폰번호(- 없이 숫자만 입력)'
+        <s.TelInput type='text' placeholder='휴대폰번호(- 없이 숫자만 입력)'
           value={user.phoneNumber}
           onChange={handlePhoneNumberChange} />
-        <VerificationBtn active={isButtonActive.toString()} onClick={handleVerificationButtonClick}>인증문자 받기</VerificationBtn>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <s.VerificationBtn active={isButtonActive.toString()} onClick={handleVerificationButtonClick}>인증문자 받기</s.VerificationBtn>
+        <s.ErrorMessage>{errorMessage}</s.ErrorMessage>
         {showVerificationButton && (
           <>
-            <TelInput type='text' placeholder='인증번호 입력'
+            <s.TelInput type='text' placeholder='인증번호 6자리 입력'
               value={inputVerificationCode}
               onChange={(e) => setInputVerificationCode(e.target.value)} />
             <p style={{ fontSize: '14px', margin: '2px 0 14px 18px' }}>어떤 경우에도 타인에게 공유하지 마세요!</p>
-            <VerificationBtn active='true' onClick={handleVerificationConfirm}>인증번호 확인</VerificationBtn>
+            <s.VerificationBtn active='true' onClick={handleVerificationConfirm}>인증번호 확인</s.VerificationBtn>
           </>
         )}
       </div>
-      <ChangeTelDiv>
+      <s.ChangeTelDiv>
         <span>휴대폰 번호가 변경되었나요?&nbsp;</span>
         <span>이메일로 계정 찾기</span>
-      </ChangeTelDiv>
+      </s.ChangeTelDiv>
       <ProfileModal
         isOpen={showVerificationModal && !isLogin}
         onClose={() => setShowVerificationModal(false)}
@@ -306,65 +196,10 @@ const AuthForm = () => {
       />
     </div>
   );
+
 };
 
 export default AuthForm;
-
-const HelloSpan = styled.span`
-  font-size: 25px;
-  font-weight: 700;
-`;
-
-const TelInput = styled.input`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 91%;
-    height: 50px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: 1px solid black;
-    margin: 0 auto;
-    font-size: 20px;
-    padding-left: 12px;
-`;
-
-const VerificationBtn = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 92%;
-    height: 50px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    color: ${(props) => (props.active === 'true' ? 'white' : 'lightgray')};
-    background-color: ${(props) => (props.active === 'true' ? '#FF6F0F' : 'white')};
-    cursor: ${(props) => (props.active === 'true' ? 'pointer' : 'default')};
-    font-size: 20px;
-    font-weight: 500;
-    margin: 15px auto;
-    font-size: 20px;
-    pointer-events: ${(props) => (props.active === 'true' ? 'auto' : 'none')};
-`;
-
-const ChangeTelDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 15px;
-
-    span:last-child {
-        cursor: pointer;
-        text-decoration-line: underline;
-    }
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-`;
 
 
 
