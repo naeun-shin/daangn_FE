@@ -112,6 +112,7 @@ const AuthForm = () => {
           setShowVerificationModal(true);
         } else {
           cookie.set('accessToken', data.authorization);
+          cookie.set('userAddress', data.dong);
           nav('/home');
         }
       } else {

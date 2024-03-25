@@ -41,7 +41,8 @@ const Home = () => {
       />
     ));
   } else {
-    content = <div>리스트가 없습니다!</div>;
+    console.log('data', data);
+    content = <div style={{ margin: '30px auto', textAlign: 'center' }}>해당 동에 게시물이 없습니다!</div>;
   }
 
   return (

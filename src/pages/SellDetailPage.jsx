@@ -34,13 +34,22 @@ const DetailPage = () => {
     }
   };
   const detailData = data.data;
+  const defaultImage = '기본 이미지 URL';
   return (
     <PageContainer>
       <ImageContainer>
-        <ProductImage
-          src={detailData.postImageList[0].url}
-          alt="product"
-        />
+        {detailData.postImageList &&
+          detailData.postImageList.length > 0 ? (
+          <ProductImage
+            src={detailData.postImageList[0].url}
+            alt="product"
+          />
+        ) : (
+          <ProductImage
+            src={defaultImage}
+            alt="default"
+          />
+        )}
       </ImageContainer>
       <InfoContainer>
         <Title>{detailData.title}</Title>

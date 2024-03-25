@@ -18,13 +18,14 @@ const Modal = () => {
   };
 
   return ReactDOM.createPortal(
-    <Modaldrop style={{ opacity: slide ? 1 : 0 }}>
+    <Modaldrop style={{ opacity: slide ? 1 : 0, width: '430px', margin: '0 auto' }}>
       <ModalWrapper
         style={{
           opacity: slide ? 1 : 0,
           transform: slide
             ? 'translateY(0)'
             : 'translateY(-20px)',
+          width: '360px', margin: '0 auto'
         }}
       >
         <ModalContainer>
@@ -70,6 +71,7 @@ const Modaldrop = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  width: 200px;
   background-color: #fff;
   border-radius: 20px;
   overflow: hidden;

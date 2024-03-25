@@ -132,7 +132,7 @@ export const getAllTradePosts = async () => {
       await instanceWithToken.get(`/trades`);
 
     const data = response.data.content;
-    console.log('response', data);
+    console.log('response..', response);
     return data;
   } catch (error) {
     console.error(
