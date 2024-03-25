@@ -13,7 +13,7 @@ import { formatUpdateTime } from '../utils';
 const Home = () => {
   const { data, isLoading, isError, error } =
     useQuery({
-      // queryKey: ['tradePosts'],  //get요청인데 넘겨줄 데이터가 없어서 쿼리키 필요 없다!
+      queryKey: ['tradePosts'], //get요청인데 넘겨줄 데이터가 없어서 쿼리키 필요 없다!
       queryFn: getAllTradePosts,
     });
 
@@ -50,7 +50,6 @@ const Home = () => {
       <Maincategory />
       <WritingButton />
       {content}
-
     </>
   );
 };

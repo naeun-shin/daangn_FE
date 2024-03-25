@@ -1,4 +1,4 @@
-import { instance, instance2 } from './axios';
+import { instanceWithToken } from './axios';
 
 // 판매글 작성 API
 export const createSalePost = async (
@@ -33,7 +33,7 @@ export const createSalePost = async (
   );
 
   try {
-    const response = await instance2.post(
+    const response = await instanceWithToken.post(
       '/trades',
       formData,
       {
@@ -84,7 +84,7 @@ export const updateSalePost = async (
     formData.append('imgId', imgId);
 
     // '/trades/{tradeId}' 엔드포인트로 POST 요청
-    const response = await instance.post(
+    const response = await instanceWithToken.post(
       `/trades/${tradeId}`,
       formData,
       {
@@ -110,9 +110,10 @@ export const deleteTradePost = async (
   tradeId,
 ) => {
   try {
-    const response = await instance.delete(
-      `/trades/${tradeId}`,
-    );
+    const response =
+      await instanceWithToken.delete(
+        `/trades/${tradeId}`,
+      );
     console.log('response:', response);
     return response;
   } catch (error) {
@@ -128,7 +129,7 @@ export const deleteTradePost = async (
 export const getAllTradePosts = async () => {
   try {
     const response =
-      await instance.get(`/trades`);
+      await instanceWithToken.get(`/trades`);
 
     const data = response.data.content;
     console.log('response', data);
@@ -147,7 +148,7 @@ export const getTradePostDetail = async (
   tradeId,
 ) => {
   try {
-    const response = await instance.get(
+    const response = await instanceWithToken.get(
       `/trades/${tradeId}`,
     );
     console.log(response);
