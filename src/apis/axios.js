@@ -1,18 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
+import Cookies from "universal-cookie";
 
-export const instance = axios.create({
+
+// 헤더가 필요 없는 인스턴스
+export const instanceWithoutHeaders = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
-  headers: {
-    'content-type':
-      'application/json;charset=UTF-8',
-    accept: 'application/json,',
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTAzMDcwNzQyNyIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0ODAxMjYwLCJpYXQiOjE3MTEyMDEyNjB9.24ES2yT3AnAra_FM4sd6-mZIqmpO5qFeld2GN9tHCww`,
-  },
 });
 
-export const instance2 = axios.create({
+// 헤더가 필요한 인스턴스
+export const instanceWithToken = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
   headers: {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTAzMDcwNzQyNyIsImF1dGgiOiJVU0VSIiwiZXhwIjoxNzE0ODAxMjYwLCJpYXQiOjE3MTEyMDEyNjB9.24ES2yT3AnAra_FM4sd6-mZIqmpO5qFeld2GN9tHCww`,
+    "content-type": "application/json",
+    accept: "application/json",
+    Authorization: `${new Cookies().get('accessToken')}`,
   },
 });

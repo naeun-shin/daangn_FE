@@ -50,6 +50,7 @@ const Home = () => {
       <Maincategory />
       <WritingButton />
       {content}
+
     </>
   );
 };
