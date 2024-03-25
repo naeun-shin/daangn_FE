@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import Intro from '../pages/Intro';
 import UserMain from '../pages/user/UserMain';
-import Footer from '../components/layout/Footer';
+// import Footer from '../components/layout/Footer';
 import MypageMain from '../pages/mypage/MypageMain';
 import Notipage from '../pages/Notipage';
 import Home from '../pages/home';
@@ -14,7 +14,9 @@ import Community from '../pages/Community';
 import CommunityCreate from '../pages/community/CommunityCreate';
 import CommunityDetail from '../pages/community/CommunityDetail';
 import SellPage from '../pages/Sellpage';
+import DetailPage from '../pages/SellDetailPage';
 import CommunityUpdate from '../pages/community/CommunityUpdate';
+
 
 const Router = () => {
   return (
@@ -53,6 +55,10 @@ const Router = () => {
         <Route
           path="/Sellpage"
           element={<SellPage />}
+        />
+        <Route
+          path="/detail/:id"
+          element={<DetailPage />}
         />
       </Routes>
       {/* <Footer /> */}
