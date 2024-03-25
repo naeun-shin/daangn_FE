@@ -1,4 +1,4 @@
-import { instance } from './axios';
+import { instanceWithToken } from './axios';
 import Community from '../pages/Community';
 
 export const getCommunityList = async (
@@ -6,7 +6,7 @@ export const getCommunityList = async (
   page,
 ) => {
   try {
-    const response = await instance.get(
+    const response = await instanceWithToken.get(
       '/community',
       {
         params: { isAsc, page },
@@ -58,7 +58,7 @@ export const createCommunity = async (
     console.log(formData.get('files'));
 
     // FormData에는 이미지와 JSON 데이터가 함께 포함되어 있음
-    const response = await instance.post(
+    const response = await instanceWithToken.post(
       '/community',
       formData,
       {
@@ -77,7 +77,7 @@ export const createCommunity = async (
 export const getCommunityDetail = async (id) => {
   console.log(id);
   try {
-    const response = await instance.get(
+    const response = await instanceWithToken.get(
       `/community/${id}`,
     );
     console.log(response.data);
@@ -90,12 +90,14 @@ export const getCommunityDetail = async (id) => {
 export const deleteCommunity = async (id) => {
   console.log(id);
   try {
-    const response = await instance.delete(
-      `/community/${id}`,
-    );
+    const response =
+      await instanceWithToken.delete(
+        `/community/${id}`,
+      );
     console.log(response);
     return response;
   } catch (error) {
+    alert(error.response.data.message);
     console.log(error);
   }
 };
@@ -128,7 +130,7 @@ export const updateCommunity = async (data) => {
   );
   console.log('files > ', formData.get('files'));
   try {
-    const response = await instance.post(
+    const response = await instanceWithToken.post(
       `/community/${data.communityId}`,
       formData,
       {
@@ -153,7 +155,7 @@ export const getCommunityComment = async (
     parseInt(communityId),
   );
   try {
-    const response = await instance.get(
+    const response = await instanceWithToken.get(
       `/community/${communityId}/comments`,
       {
         params: { isAsc, page },
@@ -179,7 +181,7 @@ export const createCommunityComment = async (
   } = newCommentValue.newCommentValue;
 
   try {
-    const response = await instance.post(
+    const response = await instanceWithToken.post(
       `community/${communityId}/comment`,
       { commentContent, parentCommentId },
     );

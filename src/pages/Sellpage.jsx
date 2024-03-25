@@ -1,17 +1,49 @@
-import React, { useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import ImageUploader from '../components/commons/ImageUpload';
 import CategorySelector from '../components/commons/CategorySelector';
 import TransactionTypeSelector from '../components/commons/TypeSelector';
+import { createSalePost } from '../apis/PostItemSale';
+import axios from 'axios';
 
 const SellPage = () => {
   const navigate = useNavigate();
-  const handleSubmit = () => {
-    navigate('/home');
+  const queryClient = useQueryClient();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createSalePost({
+        title,
+        content: description,
+        category: selectedCategory,
+        price,
+        contactPlace,
+        selectedImage: image,
+      });
+      queryClient.invalidateQueries([
+        'tradePosts',
+      ]);
+      navigate('/home');
+    } catch (error) {
+      console.error(
+        'Failed to create sale post:',
+        error,
+      );
+    }
   };
+
   // 제목, 가격
   const [title, setTitle] = useState('');
+  const onTitleChange = (e) => {
+    setTitle(e.target.value);
+    setShowCategories(e.target.value.length > 0);
+  };
   const [price, setPrice] = useState(0);
   // 포맷된 가격 인풋
   const formatPriceInput = (value) => {
@@ -43,15 +75,58 @@ const SellPage = () => {
     '생활/주방/인테리어',
   ];
 
-  const onTitleChange = (e) => {
-    setTitle(e.target.value);
-    setShowCategories(e.target.value.length > 0);
+  // 거래 희망 장소
+  const [contactPlace, setContactPlace] =
+    useState('');
+  // 참고
+  const [address, setAddress] = useState('');
+  const [addressResults, setAddressResults] =
+    useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (address.trim() !== '') {
+        handleAddressSearch();
+      } else {
+        setAddressResults([]);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [address]); // 'contactPlace' 대신 'address'를 사용합니다.
+
+  // 주소 검색 호출 함수
+  const handleAddressSearch = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/address/search?partialAddress=${encodeURIComponent(address.trim())}`,
+      );
+      const data = response.data;
+      if (data && data.length > 0) {
+        setAddressResults(data);
+      } else {
+        console.error('검색 결과가 없습니다.');
+      }
+    } catch (error) {
+      console.error(
+        '검색 요청 중 오류 발생:',
+        error,
+      );
+    }
+  };
+  //사용자가 주소 검색 후 ㅇㅇ동을 클릭하면 그 값을 사용자 주소에 저장
+  const handleAddressResultClick = (
+    selectedAddress,
+  ) => {
+    setContactPlace(selectedAddress);
+    // 검색 결과 목록을 비움
+    setAddressResults([]);
   };
 
   return (
     <Container>
       <Header>내 물건 팔기</Header>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <ImageUploader
           image={image}
           setImage={setImage}
@@ -101,7 +176,13 @@ const SellPage = () => {
           자주 쓰는 문구
         </Button>
         <Label>거래 희망 장소</Label>
-        <Input placeholder="위치 추가" />
+        <Input
+          placeholder="위치 검색"
+          value={address}
+          onChange={(e) =>
+            setAddress(e.target.value)
+          }
+        />
         <See>보여줄 동네 선택</See>
         <ButtonBox>
           <Button onClick={handleSubmit}>
@@ -109,6 +190,25 @@ const SellPage = () => {
           </Button>
         </ButtonBox>
       </Form>
+      {/* 주소 검색 결과를 렌더링하는 부분 */}
+      {addressResults.length > 0 && (
+        <div>
+          {addressResults.map(
+            (address, index) => (
+              <div
+                key={index}
+                onClick={() =>
+                  handleAddressResultClick(
+                    address.address_name, // 수정
+                  )
+                }
+              >
+                {address.address_name}
+              </div>
+            ),
+          )}
+        </div>
+      )}
     </Container>
   );
 };

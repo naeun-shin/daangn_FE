@@ -37,8 +37,9 @@ const Footer = () => {
   });
 
   if (
-    location.pathname === '/' ||
-    location.pathname === '/auth'
+    location.pathname !== '/mypage' &&
+    location.pathname !== '/community' &&
+    location.pathname !== '/home'
   ) {
     return null;
   }
@@ -65,6 +66,7 @@ const Footer = () => {
     });
   };
   const handleNearClick = () => {
+    nav('/nothing');
     setFooterIcons({
       home: false,
       news: false,
@@ -158,14 +160,15 @@ const Footer = () => {
 export default Footer;
 
 const FooterContainer = styled.div`
-  width: 100%;
-  height: 60px;
+  width: 430px;
+  margin: 0 auto;
   border-top: 1px solid black;
   display: flex;
   justify-content: space-around;
   position: fixed;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
   background-color: white;
 `;

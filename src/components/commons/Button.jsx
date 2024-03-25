@@ -105,7 +105,8 @@ const WritingButton = styled.button`
   font-weight: 700;
   color: #fff;
   position: fixed;
-  right: 30px;
+  right: 20%;
+  transform: translateX(-50%);
   bottom: 150px;
   z-index: 1000;
   transition: all 0.2s ease;

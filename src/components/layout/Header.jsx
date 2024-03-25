@@ -4,14 +4,16 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { GoBell } from 'react-icons/go';
 import { SlArrowDown } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 const Header = () => {
+  const dong = new Cookies().get('userAddress');
   return (
     <HeaderContainer>
       <>
         <Title>
-          오후동&nbsp;
-          <SlArrowDown size='15' />
+          {dong}
+          {/* <SlArrowDown size='15' /> */}
         </Title>
       </>
       <Icons>

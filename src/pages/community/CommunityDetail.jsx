@@ -10,17 +10,10 @@ import {
   CommunityDetailCnt,
   CommunityDetailTitle,
   CommunityDetailContent,
-  CommunityDetailCommentHeader,
-  CommunityDetailFirstCommentBox,
-  CommunityDetailFirstComment,
-  CommunityDetailSecondCommentBox,
   CommunityDetailImage,
   CommunityDetailLikeBox,
   CommunityDetailLikeAndSave,
   CommunityCountBox,
-  CommunityLike,
-  Footer,
-  FooterLeft,
   ModalContainer,
   ModalContent,
   ModalDeleteContainer,
@@ -39,9 +32,6 @@ import {
 } from '../../pages/styles/commonStyles';
 import { FaRegEye } from 'react-icons/fa';
 import { GoThumbsup } from 'react-icons/go';
-import { AiOutlinePicture } from 'react-icons/ai';
-import { BiMap } from 'react-icons/bi';
-import { HiPaperAirplane } from 'react-icons/hi2';
 import {
   useQuery,
   useMutation,
@@ -56,7 +46,6 @@ import { PiExport } from 'react-icons/pi';
 import { GoBellFill } from 'react-icons/go';
 import { MdArrowBackIos } from 'react-icons/md';
 import CommunityComment from '../../components/community/CommunityComment';
-import useCommunityCommentQuery from '../../utils/useQueryUtil';
 
 const CommunityDetail = () => {
   const navigate = useNavigate();
@@ -79,24 +68,6 @@ const CommunityDetail = () => {
 
   console.log(data);
   const detailList = data;
-  // console.log(detailList);
-  // 댓글 데이터 가져오는 custom hook 사용
-
-  // const { data: commentData } = useQuery({
-  //   queryKey: [
-  //     'community',
-  //     detailList.communityId,
-  //   ],
-  //   queryFn: () =>
-  //     getCommunityComment(
-  //       detailList.communityId,
-  //       isAsc,
-  //       page,
-  //     ),
-  //   staleTime: 60 * 1000,
-  // });
-
-  // console.log('commentData', commentData);
 
   const deleteCommunityContent = useMutation({
     mutationFn: deleteCommunity,

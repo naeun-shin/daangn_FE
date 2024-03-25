@@ -9,12 +9,15 @@ import UserMain from '../pages/user/UserMain';
 import Footer from '../components/layout/Footer';
 import MypageMain from '../pages/mypage/MypageMain';
 import Notipage from '../pages/Notipage';
-import Home from '../pages/home';
+import Home from '../pages/Home';
 import Community from '../pages/Community';
 import CommunityCreate from '../pages/community/CommunityCreate';
 import CommunityDetail from '../pages/community/CommunityDetail';
 import SellPage from '../pages/Sellpage';
+import DetailPage from '../pages/SellDetailPage';
 import CommunityUpdate from '../pages/community/CommunityUpdate';
+import Nothing from '../pages/Nothing';
+
 
 const Router = () => {
   return (
@@ -54,8 +57,16 @@ const Router = () => {
           path="/Sellpage"
           element={<SellPage />}
         />
+        <Route
+          path="/detail/:id"
+          element={<DetailPage />}
+        />
+        <Route
+          path="/nothing"
+          element={<Nothing />}
+        />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </BrowserRouter>
   );
 };
