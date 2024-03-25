@@ -37,8 +37,9 @@ const Footer = () => {
   });
 
   if (
-    location.pathname === '/' ||
-    location.pathname === '/auth'
+    location.pathname !== '/mypage' &&
+    location.pathname !== '/community' &&
+    location.pathname !== '/home'
   ) {
     return null;
   }

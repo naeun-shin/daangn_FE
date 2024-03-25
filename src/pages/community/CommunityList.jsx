@@ -17,7 +17,6 @@ import { IoChatbubbleOutline } from 'react-icons/io5';
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityList } from '../../apis/communityAxios';
 import Header from '../../components/layout/Header';
-import Footer from '../../components/layout/Footer';
 
 const CommunityList = () => {
   const navigate = useNavigate();
