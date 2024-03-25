@@ -33,7 +33,6 @@ export const createSalePost = async (
   );
 
   try {
-    // '/trades' 엔드포인트로 POST 요청
     const response = await instance2.post(
       '/trades',
       formData,
@@ -44,7 +43,7 @@ export const createSalePost = async (
         },
       },
     );
-    console.log(response.data); // 성공 응답 반환
+    console.log(response.data);
   } catch (error) {
     console.error(
       'Error creating sale post:',
@@ -140,5 +139,20 @@ export const getAllTradePosts = async () => {
       error,
     );
     throw error;
+  }
+};
+
+// 불러오기
+export const getTradePostDetail = async (
+  tradeId,
+) => {
+  try {
+    const response = await instance.get(
+      `/trades/${tradeId}`,
+    );
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
   }
 };
