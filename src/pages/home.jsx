@@ -31,6 +31,7 @@ const Home = () => {
     content = data.map((post) => (
       <MainItem
         key={post.id}
+        id={post.id}
         title={post.title}
         detail={`${post.contactPlace} · ${formatUpdateTime(post.createdAt)} 전`}
         price={`${post.price}`}

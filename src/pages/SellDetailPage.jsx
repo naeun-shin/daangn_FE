@@ -1,21 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  useLocation,
   useNavigate,
+  useParams,
 } from 'react-router-dom';
-import { deleteTradePost } from '../apis/PostItemSale';
+import { useQuery } from '@tanstack/react-query';
+import {
+  deleteTradePost,
+  getTradePostDetail,
+} from '../apis/PostItemSale';
 
 const DetailPage = () => {
-  const location = useLocation();
+  const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
 
-  const { title, detail, price, imageUrl, id } =
-    location.state || {};
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['tradePostDetail', id],
+    queryFn: () => getTradePostDetail(id),
+  });
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error occurred</div>;
+
+  // 상세 정보 삭제 함수
   const handleDelete = async () => {
     const result = await deleteTradePost(id);
-    console.log('결과:', result);
     if (result.status === 200) {
       console.log('삭제 성공');
       navigate('/home');
@@ -23,20 +33,19 @@ const DetailPage = () => {
       console.error('삭제 실패', result.data);
     }
   };
-
+  const detailData = data.data;
   return (
     <PageContainer>
       <ImageContainer>
         <ProductImage
-          src={imageUrl}
+          src={detailData.postImageList[0].url}
           alt="product"
         />
       </ImageContainer>
       <InfoContainer>
-        <Title>{title}</Title>
-        <Detail>{detail}</Detail>
-        <Price>{price}원</Price>
-        <DetailButton>상세보기</DetailButton>
+        <Title>{detailData.title}</Title>
+        <Detail>{detailData.detail}</Detail>
+        <Price>{detailData.price}원</Price>
         <DeleteButton onClick={handleDelete}>
           삭제하기
         </DeleteButton>
@@ -90,17 +99,6 @@ const Price = styled.span`
   font-size: 28px;
   color: #000;
   font-weight: bold;
-`;
-
-const DetailButton = styled.button`
-  padding: 10px 16px;
-  background-color: #5c6bc0;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 16px;
 `;
 
 const DeleteButton = styled.button`

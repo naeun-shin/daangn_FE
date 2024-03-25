@@ -11,18 +11,9 @@ const MainItem = ({
   id,
 }) => {
   const navigate = useNavigate();
-
-  // 상세 페이지로 이동하는 함수
+  console.log(id);
   const navigateDetailPage = () => {
-    navigate(`/detail/${id}`, {
-      state: {
-        title,
-        detail,
-        price,
-        imageUrl,
-        id,
-      },
-    });
+    navigate(`/detail/${id}`);
   };
 
   return (
